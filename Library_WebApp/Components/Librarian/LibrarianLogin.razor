@@ -1,5 +1,94 @@
-﻿<h3>LibrarianLogin</h3>
+﻿@if (showRegistrationForm)
+{
+    <h3 class="text-center">Librarian Registration</h3>
+    <div class="container d-flex justify-content-center align-items-center mt-5">
+        <div class="border rounded p-4 w-50">
+            <EditForm FormName="RegisterForm" Model="librarian" OnSubmit="AddNewUser">
+                <DataAnnotationsValidator />
+                <ValidationSummary />
+                <div class="mb-3">
+                    <label for="firstname" class="form-label fw-bold">Firstname:</label>
+                    <InputText class="form-control" type="text" id="firstname" @bind-Value=librarian.firstname placeholder="Enter the Firstname" />
+                </div><div class="mb-3">
+                    <label for="lastname" class="form-label fw-bold">Lastname:</label>
+                    <InputText class="form-control" type="text" id="lastname" @bind-Value=librarian.username placeholder="Enter the Lastname" />
+                </div><div class="mb-3">
+                    <label for="username" class="form-label fw-bold">Username:</label>
+                    <InputText class="form-control" type="text" id="username" @bind-Value=librarian.username placeholder="Enter the Username" />
+                </div>
+                <div class="mb-3">
+                    <label for="email" class="form-label fw-bold">Email:</label>
+                    <InputText class="form-control" type="email" id="email" @bind-Value=librarian.email placeholder="Enter Your Email" />
+                </div>
+                <div class="mb-3">
+                    <label for="password" class="form-label fw-bold">Password:</label>
+                    <InputText class="form-control" type="password" id="password" @bind-Value=librarian.password placeholder="Enter the Password" />
+                </div>
+                <div class="mb-3">
+                    <label for="phone" class="form-label fw-bold">Phone:</label>
+                    <InputText class="form-control" type="text" id="phone" @bind-Value=librarian.phone placeholder="Enter the Phone number" />
+                </div>
+                <div class="mb-3">
+                    <label for="dateOfJoining" class="form-label fw-bold">DOJ:</label>
+                    <InputDate TValue="DateOnly" class="form-control" id="dateOfJoining" @bind-Value="librarian.DateOfJoining" placeholder="Enter the date"></InputDate>
+                </div>
+                <div class="mb-3 d-grid gap-2 d-md-flex justify-content-md-center">
+                    <button class="btn btn-primary" type="submit">Submit</button>
+                    <button class="btn btn-secondary" type="button" @onclick="() => OnCancel.InvokeAsync()">Cancel</button>
+                </div>
+                <div class="mb-3 text-center">
+                    <p>Already Have an Account <NavLink @onclick="() => showRegistrationForm = false" href="">LogIn</NavLink> Here.</p>
+                </div>
+            </EditForm>
+        </div>
+    </div>
+}
 
-@code {
+else
+{
+    <h3 class="text-center">Librarian Login</h3>
+    <div class="container d-flex justify-content-center align-items-center mt-5">
+        <div class="border rounded p-4 w-50">
+            <EditForm FormName="UserLogin" Model="addUser" OnSubmit="ValidateUser">
+                <DataAnnotationsValidator />
+                <ValidationSummary />
+                <div class="mb-3">
+                    <label for="username" class="form-label fw-bold">Username:</label>
+                    <InputText class="form-control" type="text" id="username" @bind-Value=addUser.username placeholder="Enter the Username" />
+                </div>
+                <div class="mb-3">
+                    <label for="password" class="form-label fw-bold">Password:</label>
+                    <InputText class="form-control" type="password" id="password" @bind-Value=addUser.password placeholder="Enter the Password" />
+                </div>
+                <div class="mb-3 d-grid gap-2 d-md-flex justify-content-md-center">
+                    <button class="btn btn-primary" type="submit">Submit</button>
+                    <button class="btn btn-secondary" type="button" @onclick="() => OnCancel.InvokeAsync()">Cancel</button>
+                </div>
+                <div class="mb-3 text-center">
+                    <p>Don't Have an Account <NavLink @onclick="() => showRegistrationForm = true" href="">SignUp</NavLink> Here.</p>
+                </div>
+            </EditForm>
+        </div>
+    </div>
+}
 
+@code
+{
+    public AddUser addUser { get; set; } = new();
+    public Librarian librarian { get; set; } = new();
+
+    [Parameter]
+    public EventCallback OnCancel { get; set; }
+
+    public bool showRegistrationForm = false;
+
+    private void ValidateUser()
+    {
+
+    }
+
+    private void AddNewUser()
+    {
+
+    }
 }

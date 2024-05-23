@@ -14,6 +14,15 @@
 
 @if (Role.Equals("Student", StringComparison.OrdinalIgnoreCase))
 {
-    Console.WriteLine("Student Component is loaded");
     <StudentLogin OnCancel="OnCancel" />
+}
+
+else if(Role.Equals("Librarian", StringComparison.OrdinalIgnoreCase))
+{
+    <LibrarianLogin OnCancel="OnCancel" />
+}
+
+else if(Role.Equals("Admin", StringComparison.OrdinalIgnoreCase))
+{
+    <AdminLogin OnCancel="OnCancel" />
 }
