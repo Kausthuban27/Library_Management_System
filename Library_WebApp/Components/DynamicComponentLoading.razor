@@ -1,21 +1,19 @@
-﻿@code 
+﻿@code
 {
     [Parameter]
     public string Role { get; set; } = null!;
 
     [Parameter]
-    public EventCallback OnCancel { get; set; } 
+    public EventCallback OnCancel { get; set; }
+
+    protected override void OnParametersSet()
+    {
+        Console.WriteLine($"Dynamic Component loading Initialized with role {Role}");
+    }
 }
 
-@if(Role == "Student")
+@if (Role.Equals("Student", StringComparison.OrdinalIgnoreCase))
 {
+    Console.WriteLine("Student Component is loaded");
     <StudentLogin OnCancel="OnCancel" />
-}
-else if(Role == "Librarian")
-{
-    <LibrarianLogin OnCancel="OnCancel" />
-}
-else if(Role == "Admin")
-{
-    <AdminLogin OnCancel="OnCancel" />
 }

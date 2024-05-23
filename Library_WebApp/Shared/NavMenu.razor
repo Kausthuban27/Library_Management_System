@@ -1,11 +1,13 @@
-﻿<BSNav Class="container-fluid d-flex align-items-center">
+﻿@inject NavigationManager Navigator
+
+<BSNav Class="container-fluid d-flex align-items-center">
         <BSNavbarBrand>
             <img class="logo" src="Images/logo_lib.svg" alt="forecastr logo">
         </BSNavbarBrand>
         <div class="d-flex flex-row mx-auto">
-            <BSNavItem Url="/" Class="text-white">Home</BSNavItem>
-            <BSNavItem Url="#" Class="text-white">About</BSNavItem>
-            <BSNavItem Url="#" Class="text-white">Contact</BSNavItem>
+            <NavLink href="/" Class="text-white nav-item nav-link" @onclick="NavigateToHome">Home</NavLink>
+            <NavLink href="#" Class="text-white nav-item nav-link">About</NavLink>
+            <NavLink href="#" Class="text-white nav-item nav-link">Contact</NavLink>
         </div>
 </BSNav>
 
@@ -17,3 +19,11 @@
         height: 40px;
     }
 </style>
+
+@code
+{
+    private void NavigateToHome()
+    {
+        Navigator.NavigateTo("/", forceLoad: true);
+    }
+}
