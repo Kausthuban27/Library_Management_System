@@ -1,0 +1,21 @@
+﻿@code 
+{
+    [Parameter]
+    public string Role { get; set; } = null!;
+
+    [Parameter]
+    public EventCallback OnCancel { get; set; } 
+}
+
+@if(Role == "Student")
+{
+    <StudentLogin OnCancel="OnCancel" />
+}
+else if(Role == "Librarian")
+{
+    <LibrarianLogin OnCancel="OnCancel" />
+}
+else if(Role == "Admin")
+{
+    <AdminLogin OnCancel="OnCancel" />
+}

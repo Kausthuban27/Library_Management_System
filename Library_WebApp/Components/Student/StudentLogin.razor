@@ -1,65 +1,99 @@
-﻿<h3>StudentLogin</h3>
+﻿<h3 class="text-center">Student Login</h3>
 
-<div class="form-container login-form">
-    <EditForm FornName="UserLogin" Model="addUser">
-        <DataAnnotationsValidator />
-        <ValidationSummary />
-        <div class="mb-3">
-            <label for="username" class="form-label">Username:</label>
-            <InputText class="form-control" type="text" id="username" @bind-value=addUser.username placeholder="Enter the Username"/>
-        </div>
-        <div class="mb-3">
-            <label for="password" class="form-label">Password:</label>
-            <InputText class="form-control" type="password" id="password" @bind-value=addUser.password placeholder="Enter the Password"/>
-        </div>
-        <button class="btn btn-primary" type="submit">Submit</button>
-    </EditForm>
-</div>
+@if(showRegistrationForm)
+{
+    <h3 class="text-center">Student Registration</h3>
+    <div class="form-container reg-form">
+        <EditForm FormName="RegisterForm" Model="getUser" OnSubmit="AddNewUser">
+            <DataAnnotationsValidator />
+            <ValidationSummary />
+            <div class="mb-3">
+                <label for="firstname" class="form-label">Firstname:</label>
+                <InputText class="form-control" type="text" id="firstname" @bind-value=getUser.firstname placeholder="Enter the Firstname" />
+            </div><div class="mb-3">
+                <label for="lastname" class="form-label">Lastname:</label>
+                <InputText class="form-control" type="text" id="lastname" @bind-value=getUser.username placeholder="Enter the Lastname" />
+            </div><div class="mb-3">
+                <label for="username" class="form-label">Username:</label>
+                <InputText class="form-control" type="text" id="username" @bind-value=getUser.username placeholder="Enter the Username" />
+            </div>
+            <div class="mb-3">
+                <label for="password" class="form-label">Password:</label>
+                <InputText class="form-control" type="password" id="password" @bind-value=getUser.password placeholder="Enter the Password" />
+            </div>
+            <div class="mb-3">
+                <label for="department" class="form-label">Department:</label>
+               <BSDropdown id="department" Class="form-select" @bind-value=getUser.department>
+                   <BSDropdownItem>CSE</BSDropdownItem>
+                   <BSDropdownItem>ECE</BSDropdownItem>
+                   <BSDropdownItem>IT</BSDropdownItem>
+                   <BSDropdownItem>EEE</BSDropdownItem>
+                   <BSDropdownItem>AIDS</BSDropdownItem>
+                   <BSDropdownItem>MECH</BSDropdownItem>
+               </BSDropdown>
+            </div>
+            <div class="mb-3">
+                <label for="year" class="form-label">Year:</label>
+               <BSDropdown id="year" Class="form-select" @bind-value=getUser.year>
+                   <BSDropdownItem>1</BSDropdownItem>
+                   <BSDropdownItem>2</BSDropdownItem>
+                   <BSDropdownItem>3</BSDropdownItem>
+                   <BSDropdownItem>4</BSDropdownItem>
+               </BSDropdown>
+            </div>
+            <div class="mb-3 d-flex justify-content-between">
+                <button class="btn btn-primary" type="submit">Submit</button>
+                <button class="btn btn-secondary" type="button" @onclick="() => OnCancel.InvokeAsync()">Cancel</button>
+            </div>
+            <div class="mb-3">
+                <p>Already Have an Account <NavLink @onclick = "() => showRegistrationForm = true">LogIn</NavLink> Here.</p>
+            </div>
+        </EditForm>
+    </div>
+}
 
-<div class="form-container reg-form">
-    <EditForm FormName="RegisterForm" Model="getUser">
-        <DataAnnotationsValidator />
-        <ValidationSummary />
-        <div class="mb-3">
-            <label for="firstname" class="form-label">Firstname:</label>
-            <InputText class="form-control" type="text" id="firstname" @bind-value=getUser.firstname placeholder="Enter the Firstname" />
-        </div><div class="mb-3">
-            <label for="lastname" class="form-label">Lastname:</label>
-            <InputText class="form-control" type="text" id="lastname" @bind-value=getUser.username placeholder="Enter the Lastname" />
-        </div><div class="mb-3">
-            <label for="username" class="form-label">Username:</label>
-            <InputText class="form-control" type="text" id="username" @bind-value=getUser.username placeholder="Enter the Username" />
-        </div>
-        <div class="mb-3">
-            <label for="password" class="form-label">Password:</label>
-            <InputText class="form-control" type="password" id="password" @bind-value=getUser.password placeholder="Enter the Password" />
-        </div>
-        <div class="mb-3">
-            <label for="department" class="form-label">Department:</label>
-           <BSDropdown id="department" Class="form-select" @bind-value=getUser.department>
-               <BSDropdownItem>CSE</BSDropdownItem>
-               <BSDropdownItem>ECE</BSDropdownItem>
-               <BSDropdownItem>IT</BSDropdownItem>
-               <BSDropdownItem>EEE</BSDropdownItem>
-               <BSDropdownItem>AIDS</BSDropdownItem>
-               <BSDropdownItem>MECH</BSDropdownItem>
-           </BSDropdown>
-        </div>
-        <div class="mb-3">
-            <label for="year" class="form-label">Year:</label>
-           <BSDropdown id="year" Class="form-select" @bind-value=getUser.year>
-               <BSDropdownItem>I</BSDropdownItem>
-               <BSDropdownItem>II</BSDropdownItem>
-               <BSDropdownItem>III</BSDropdownItem>
-               <BSDropdownItem>IV</BSDropdownItem>
-           </BSDropdown>
-        </div>
-        <button class="btn btn-primary" type="submit">Submit</button>
-    </EditForm>
-</div>
+else
+{
+    <div class="form-container login-form">
+        <EditForm FornName="UserLogin" Model="addUser" OnSubmit="ValidateUser">
+            <DataAnnotationsValidator />
+            <ValidationSummary />
+            <div class="mb-3">
+                <label for="username" class="form-label">Username:</label>
+                <InputText class="form-control" type="text" id="username" @bind-value=addUser.username placeholder="Enter the Username" />
+            </div>
+            <div class="mb-3">
+                <label for="password" class="form-label">Password:</label>
+                <InputText class="form-control" type="password" id="password" @bind-value=addUser.password placeholder="Enter the Password" />
+            </div>
+            <div class="mb-3 d-flex justify-content-between">
+                <button class="btn btn-primary" type="submit">Submit</button>
+                <button class="btn btn-secondary" type="button" @onclick="() => OnCancel.InvokeAsync()" >Cancel</button>
+            </div>
+            <div class="mb-3">
+                <p>Don't' Have an Account <NavLink @onclick="() => showRegistrationForm = false">SignUp</NavLink> Here.</p>
+            </div>
+        </EditForm>
+    </div>
+}
 
 @code 
 {
     public AddUser addUser { get; set; } = new();
     public GetUser getUser { get; set; } = new();
+
+    [Parameter]
+    public EventCallback OnCancel { get; set; }
+
+    protected bool showRegistrationForm = false;
+
+    private void ValidateUser()
+    {
+
+    }
+
+    private void AddNewUser()
+    {
+        
+    }
 }
