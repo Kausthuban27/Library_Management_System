@@ -7,15 +7,17 @@ using Microsoft.OpenApi.Models;
 using Microsoft.Extensions.Logging;
 using Microsoft.Azure.Functions.Worker.Http;
 using System.Net;
+using LibraryData.Services;
 
 namespace LibraryData.Functions.Students
 {
     public class GetStudent
     {
         private readonly ILogger<GetStudent> _logger;
-
-        public GetStudent(ILogger<GetStudent> logger)
+        private readonly StudentService _studentService;
+        public GetStudent(ILogger<GetStudent> logger, StudentService studentService)
         {
+            _studentService = studentService;
             _logger = logger;
         }
 
@@ -25,12 +27,12 @@ namespace LibraryData.Functions.Students
         [OpenApiResponseWithBody(statusCode: HttpStatusCode.OK, contentType: "text/plain", bodyType: typeof(bool), Description = "Student Exists")]
         [OpenApiResponseWithBody(statusCode: HttpStatusCode.BadRequest, contentType: "text/plain", bodyType: typeof(bool), Description = "Invalid Details")]
         [Function("GetStudent")]
-        public IActionResult Run([HttpTrigger(AuthorizationLevel.Anonymous, "get")] HttpRequestData req)
+        public async Task<IActionResult> GetStudentData([HttpTrigger(AuthorizationLevel.Anonymous, "get")] HttpRequestData req)
         {
             _logger.LogInformation("C# HTTP trigger function processed a request.");
             string username = req.Query["username"]!;
             string password = req.Query["password"]!;
-            return new OkObjectResult("Welcome to Azure Functions!");
+            return await _studentService.GetStudent(username, password);
         }
     }
 }

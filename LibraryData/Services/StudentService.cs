@@ -47,9 +47,18 @@ namespace LibraryData.Services
             }
         }
 
-        public Task<(HttpStatusCode, bool)> GetStudent(string username, string password)
+        public async Task<IActionResult> GetStudent(string username, string password)
         {
-            throw new NotImplementedException();
+            var existingStudent = await _libraryContext.Students.Where(u => u.Username == username && u.Lastname == password).ToListAsync();
+            if (existingStudent.Any())
+            {
+                return new OkObjectResult("User Exists");
+            }
+            else
+            {
+                return new BadRequestObjectResult("User Does not Exist");
+            }
+
         }
 
         public void SaveChanges()
