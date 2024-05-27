@@ -5,11 +5,6 @@
 
     [Parameter]
     public EventCallback OnCancel { get; set; }
-
-    protected override void OnParametersSet()
-    {
-        Console.WriteLine($"Dynamic Component loading Initialized with role {Role}");
-    }
 }
 
 @if (Role.Equals("Student", StringComparison.OrdinalIgnoreCase))

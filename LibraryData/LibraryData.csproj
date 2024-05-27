@@ -26,4 +26,10 @@
   <ItemGroup>
     <Using Include="System.Threading.ExecutionContext" Alias="ExecutionContext" />
   </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Functions\" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\LibrarySQL\LibrarySQL.sqlproj" />
+  </ItemGroup>
 </Project>

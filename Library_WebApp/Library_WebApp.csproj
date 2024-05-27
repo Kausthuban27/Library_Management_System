@@ -11,4 +11,12 @@
     <PackageReference Include="BlazorStrap.V5" Version="5.1.102.51723" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Services\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\LibraryData\LibraryData.csproj" />
+  </ItemGroup>
+
 </Project>
