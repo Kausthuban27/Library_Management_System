@@ -1,0 +1,82 @@
+﻿{
+  "$schema": "https://raw.githubusercontent.com/ErikEJ/EFCorePowerTools/master/samples/efcpt-schema.json",
+  "code-generation": {
+    "enable-on-configuring": false,
+    "generate-mermaid-diagram": false,
+    "merge-dacpacs": false,
+    "refresh-object-lists": true,
+    "remove-defaultsql-from-bool-properties": false,
+    "soft-delete-obsolete-files": true,
+    "t4-template-path": null,
+    "type": "all",
+    "use-alternate-stored-procedure-resultset-discovery": false,
+    "use-data-annotations": false,
+    "use-database-names": false,
+    "use-decimal-data-annotation-for-sproc-results": true,
+    "use-inflector": true,
+    "use-legacy-inflector": false,
+    "use-many-to-many-entity": false,
+    "use-nullable-reference-types": true,
+    "use-prefix-navigation-naming": false,
+    "use-t4": false
+  },
+  "file-layout": {
+    "output-dbcontext-path": null,
+    "output-path": "Models"
+  },
+  "names": {
+    "dbcontext-name": "LibraryDbContext",
+    "dbcontext-namespace": null,
+    "model-namespace": null,
+    "root-namespace": "LibraryData"
+  },
+  "tables": [
+    {
+      "name": "[dbo].[BookDetails]"
+    },
+    {
+      "name": "[dbo].[BookIssue]"
+    },
+    {
+      "name": "[dbo].[BookRack]"
+    },
+    {
+      "name": "[dbo].[EBookRent]"
+    },
+    {
+      "name": "[dbo].[Librarian]"
+    },
+    {
+      "name": "[dbo].[ReturnBook]"
+    },
+    {
+      "name": "[dbo].[Student]"
+    }
+  ],
+  "type-mappings": {
+    "UncountableWords": null,
+    "UseBoolPropertiesWithoutDefaultSql": false,
+    "UseDatabaseNames": true,
+    "UseDateOnlyTimeOnly": false,
+    "UseDbContextSplitting": false,
+    "UseDecimalDataAnnotationForSprocResult": true,
+    "UseFluentApiOnly": true,
+    "UseHandleBars": false,
+    "UseHierarchyId": false,
+    "UseInflector": true,
+    "UseLegacyPluralizer": false,
+    "UseManyToManyEntity": false,
+    "UseNoDefaultConstructor": false,
+    "UseNoNavigations": false,
+    "UseNoObjectFilter": false,
+    "UseNodaTime": false,
+    "UseNullableReferences": false,
+    "UsePrefixNavigationNaming": false,
+    "UseSchemaFolders": false,
+    "UseSchemaNamespaces": false,
+    "UseSpatial": false,
+    "UseT4": false,
+    "use-NodaTime": false,
+    "use-spatial": false
+  }
+}
