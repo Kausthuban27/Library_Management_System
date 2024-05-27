@@ -15,5 +15,9 @@
     <Folder Include="Services\" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\LibraryData\LibraryData.csproj" />
+  </ItemGroup>
+
 
 </Project>
