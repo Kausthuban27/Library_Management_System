@@ -12,7 +12,9 @@ var host = new HostBuilder()
     {
         services.AddApplicationInsightsTelemetryWorkerService();
         services.ConfigureFunctionsApplicationInsights();
-        services.AddDbContext<librarydbContext>();
+        var configuration = context.Configuration;
+        string connectionString = configuration.GetSection("ConnectionStrings:defaultConnection").Value!;
+        services.AddDbContext<librarydbContext>(options => options.UseSqlServer(connectionString));
         services.AddScoped<IStudent, StudentService>();
         services.AddCors(options => options.AddPolicy("AllowAny", policy => policy.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader()));
     })

@@ -13,8 +13,8 @@ namespace LibraryData.Interface
 {
     public interface IStudent
     {
-        public Task<IActionResult> GetStudent(string username, string password);
-        public Task<IActionResult> AddStudent(Student student);
-        public void SaveChanges();
+        Task<IActionResult> GetStudent(string username, string password);
+        Task<IActionResult> AddStudent(Student student);
+        void SaveChanges();
     }
 }
