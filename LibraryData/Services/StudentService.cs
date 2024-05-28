@@ -51,11 +51,11 @@ namespace LibraryData.Services
             }
         }
 
-        public async Task<IActionResult> GetStudent(string username, string password)
+        public async Task<IActionResult> GetStudent(string username)
         {
             try
             {
-                var existingStudent = await _libraryContext.Students.Where(u => u.Username == username && u.Password == password).ToListAsync();
+                var existingStudent = await _libraryContext.Students.Where(u => u.Username == username).ToListAsync();
                 if (existingStudent.Any() || existingStudent != null)
                 {
                     return new OkObjectResult("User Exists");

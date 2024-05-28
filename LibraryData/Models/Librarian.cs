@@ -21,5 +21,5 @@ public partial class Librarian
     public string Phone { get; set; } = null!;
 
     [NotMapped]
-    public DateOnly DateOfJoining { get; set; }
+    public DateOnly DateOfJoining { get; set; } = DateOnly.FromDateTime(DateTime.Now);
 }
