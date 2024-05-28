@@ -41,17 +41,7 @@ namespace LibraryData.Functions.Students
 
             try
             {
-                var request = await req.ReadAsStringAsync();
-                if (request == null)
-                {
-                    _logger.LogError("Request body is null");
-                    return req.CreateResponse(HttpStatusCode.BadRequest);
-                }
-                var student = JsonConvert.DeserializeObject<Student>(request);
-                if (student == null)
-                {
-                    return req.CreateResponse(HttpStatusCode.BadRequest);
-                }
+                var student = await JsonHelper.DesrializeRequest<Student>(req);
                 var (statusCode, result) = await _student.AddStudent(student);
                 if(result)
                 {

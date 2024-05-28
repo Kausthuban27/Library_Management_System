@@ -1,5 +1,6 @@
 ﻿using Microsoft.Azure.Functions.Worker.Http;
-using System.Text.Json;
+using Newtonsoft.Json;
+using LibraryData.Models;
 
 namespace LibraryData.Utilities
 {
@@ -7,12 +8,17 @@ namespace LibraryData.Utilities
     {
         public static async Task<T> DesrializeRequest<T>(HttpRequestData request)
         {
-            request.Body.Position = 0;
-            using (var reader = new StreamReader(request.Body))
+            if (request == null)
             {
-                var body = await reader.ReadToEndAsync();
-                return JsonSerializer.Deserialize<T>(body)!;
+                throw new ArgumentNullException(nameof(request));
             }
+            var requestContent = await request.ReadAsStringAsync();
+            if(requestContent == null)
+            {
+                throw new ArgumentNullException(nameof(requestContent));
+            }
+            var requestData = JsonConvert.DeserializeObject<T>(requestContent);
+            return requestData!;
         }
     }
 }
