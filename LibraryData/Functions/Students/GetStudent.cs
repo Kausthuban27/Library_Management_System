@@ -8,14 +8,15 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Azure.Functions.Worker.Http;
 using System.Net;
 using LibraryData.Services;
+using LibraryData.Interface;
 
 namespace LibraryData.Functions.Students
 {
     public class GetStudent
     {
         private readonly ILogger<GetStudent> _logger;
-        private readonly StudentService _studentService;
-        public GetStudent(ILogger<GetStudent> logger, StudentService studentService)
+        private readonly IStudent _studentService;
+        public GetStudent(ILogger<GetStudent> logger, IStudent studentService)
         {
             _studentService = studentService;
             _logger = logger;
@@ -24,8 +25,8 @@ namespace LibraryData.Functions.Students
         [OpenApiOperation(operationId: "GetStudent", tags: new[] { "" }, Visibility = OpenApiVisibilityType.Important)]
         [OpenApiParameter(name: "username", In = ParameterLocation.Query, Type = typeof(string), Required = true, Visibility = OpenApiVisibilityType.Important)]
         [OpenApiParameter(name: "password", In = ParameterLocation.Query, Type = typeof(string), Required = true, Visibility = OpenApiVisibilityType.Important)]
-        [OpenApiResponseWithBody(statusCode: HttpStatusCode.OK, contentType: "text/plain", bodyType: typeof(bool), Description = "Student Exists")]
-        [OpenApiResponseWithBody(statusCode: HttpStatusCode.BadRequest, contentType: "text/plain", bodyType: typeof(bool), Description = "Invalid Details")]
+        [OpenApiResponseWithBody(statusCode: HttpStatusCode.OK, contentType: "text/plain", bodyType: typeof(IActionResult), Description = "Student Exists")]
+        [OpenApiResponseWithBody(statusCode: HttpStatusCode.BadRequest, contentType: "text/plain", bodyType: typeof(IActionResult), Description = "Invalid Details")]
         [Function("GetStudent")]
         public async Task<IActionResult> GetStudentData([HttpTrigger(AuthorizationLevel.Anonymous, "get")] HttpRequestData req)
         {

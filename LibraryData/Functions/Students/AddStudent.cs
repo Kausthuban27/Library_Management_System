@@ -13,15 +13,16 @@ using LibraryData.Services;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using LibraryData.Utilities;
 using Microsoft.IdentityModel.Tokens;
+using LibraryData.Interface;
 
 namespace LibraryData.Functions.Students
 {
     public class AddStudent
     {
         private readonly ILogger<AddStudent> _logger;
-        private readonly StudentService _student;
+        private readonly IStudent _student;
 
-        public AddStudent(ILogger<AddStudent> logger, StudentService student)
+        public AddStudent(ILogger<AddStudent> logger, IStudent student)
         {
             _logger = logger;
             _student = student;
@@ -29,8 +30,8 @@ namespace LibraryData.Functions.Students
 
         [OpenApiOperation(operationId: "AddStudent", tags: new [] {""}, Visibility = OpenApiVisibilityType.Important)]
         [OpenApiRequestBody(contentType: "application/json", bodyType: typeof(Student), Required = true)]
-        [OpenApiResponseWithBody(statusCode: HttpStatusCode.OK, contentType: "text/plain", bodyType: typeof(StatusCodeResult), Description = "Student Added Successfully")]
-        [OpenApiResponseWithBody(statusCode: HttpStatusCode.BadRequest, contentType: "text/plain", bodyType: typeof(StatusCodeResult), Description = "Invalid Details")]
+        [OpenApiResponseWithBody(statusCode: HttpStatusCode.OK, contentType: "text/plain", bodyType: typeof(IActionResult), Description = "Student Added Successfully")]
+        [OpenApiResponseWithBody(statusCode: HttpStatusCode.BadRequest, contentType: "text/plain", bodyType: typeof(IActionResult), Description = "Invalid Details")]
         [Function("AddStudent")]
         public async Task<IActionResult> AddStudentData([HttpTrigger(AuthorizationLevel.Anonymous, "post")] HttpRequestData req)
         {

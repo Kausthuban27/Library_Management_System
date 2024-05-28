@@ -2,6 +2,7 @@
 #nullable enable
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace LibraryData.Models;
 
@@ -21,5 +22,6 @@ public partial class Librarian
 
     public string Phone { get; set; } = null!;
 
+    [NotMapped]
     public DateOnly DateOfJoining { get; set; }
 }

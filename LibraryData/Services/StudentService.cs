@@ -10,15 +10,18 @@ using System.Text;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using System.Web.Http;
+using Microsoft.Extensions.Logging;
 
 namespace LibraryData.Services
 {
-    public class StudentService: IStudent
+    public class StudentService : IStudent
     {
         private readonly librarydbContext _libraryContext;
-        public StudentService(librarydbContext context) 
+        private readonly ILogger<StudentService> _logger;
+        public StudentService(librarydbContext context, ILogger<StudentService> logger) 
         {
             _libraryContext = context;
+            _logger = logger;
         }
 
         public async Task<IActionResult> AddStudent(Student student)
@@ -51,8 +54,8 @@ namespace LibraryData.Services
         {
             try
             {
-                var existingStudent = await _libraryContext.Students.Where(u => u.Username == username && u.Lastname == password).ToListAsync();
-                if (existingStudent.Any())
+                var existingStudent = await _libraryContext.Students.Where(u => u.Username == username && u.Password == password).ToListAsync();
+                if (existingStudent.Any() || existingStudent != null)
                 {
                     return new OkObjectResult("User Exists");
                 }
@@ -61,9 +64,10 @@ namespace LibraryData.Services
                     return new BadRequestObjectResult("User Does not Exist");
                 }
             }
-            catch
-            { 
-                return new InternalServerErrorResult();
+            catch(Exception ex)
+            {
+                _logger.LogError(ex, "GetStudent: An unexpected error occurred.");
+                return new StatusCodeResult(500);
             }
         }
 

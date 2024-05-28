@@ -15,6 +15,8 @@ public partial class Student
 
     public string Username { get; set; } = null!;
 
+    public string Password{ get; set; } = null!;
+
     public string Department { get; set; } = null!;
 
     public int Year { get; set; }
