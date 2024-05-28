@@ -36,7 +36,8 @@ namespace LibraryData.Functions.Librarians
                 _logger.LogError("Invalid Details are provided");
                 return req.CreateResponse(HttpStatusCode.BadRequest);
             }
-            return req.CreateResponse(await _librarian.AddLibrarian(librarian));
+            var (statusCode, result) = await _librarian.AddLibrarian(librarian);
+            return req.CreateResponse(statusCode);
         }
     }
 }

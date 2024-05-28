@@ -9,7 +9,7 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Azure.Functions.Worker.Http;
 using LibraryData.Interface;
 
-namespace LibraryData.Functions.Librarian
+namespace LibraryData.Functions.Librarians
 {
     public class GetLibrarian
     {
