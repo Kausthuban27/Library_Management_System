@@ -30,8 +30,8 @@ namespace LibraryData.Services
             {
                 if (student != null)
                 {
-                    var existingStudent = await _libraryContext.Students.Where(u => u.Firstname == student.Firstname).ToListAsync();
-                    if (existingStudent.Any() || existingStudent != null)
+                    var existingStudent = await _libraryContext.Students.Where(u => u.Username == student.Username).ToListAsync();
+                    if (existingStudent.Any())
                     {
                         throw new ExistingUserException("User Already Exists");
                     }

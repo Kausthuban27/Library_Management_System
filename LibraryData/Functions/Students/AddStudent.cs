@@ -33,8 +33,8 @@ namespace LibraryData.Functions.Students
         [Function("AddStudent")]
         [OpenApiOperation(operationId: "AddStudent", tags: new [] {""}, Visibility = OpenApiVisibilityType.Important)]
         [OpenApiRequestBody(contentType: "application/json", bodyType: typeof(Student), Required = true)]
-        [OpenApiResponseWithBody(statusCode: HttpStatusCode.OK, contentType: "text/plain", bodyType: typeof(StatusCodeResult), Description = "Student Added Successfully")]
-        [OpenApiResponseWithBody(statusCode: HttpStatusCode.BadRequest, contentType: "text/plain", bodyType: typeof(StatusCodeResult), Description = "Invalid Details")]
+        [OpenApiResponseWithBody(statusCode: HttpStatusCode.OK, contentType: "text/plain", bodyType: typeof(string), Description = "Student Added Successfully")]
+        [OpenApiResponseWithBody(statusCode: HttpStatusCode.BadRequest, contentType: "text/plain", bodyType: typeof(string), Description = "Invalid Details")]
         public async Task<HttpResponseData> AddStudentData([HttpTrigger(AuthorizationLevel.Anonymous, "post")] HttpRequestData req)
         {
             _logger.LogInformation("C# HTTP trigger function processed a request.");
@@ -59,7 +59,7 @@ namespace LibraryData.Functions.Students
                 }
                 return req.CreateResponse(HttpStatusCode.BadRequest);
             }
-            catch (Exception ex) 
+            catch (Exception) 
             {
                 var response = req.CreateResponse(HttpStatusCode.InternalServerError);
                 return response;
