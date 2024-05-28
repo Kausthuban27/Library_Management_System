@@ -14,7 +14,7 @@ namespace LibraryData.Interface
     public interface IStudent
     {
         Task<IActionResult> GetStudent(string username, string password);
-        Task<IActionResult> AddStudent(Student student);
+        Task<(HttpStatusCode, bool)> AddStudent(Student student);
         void SaveChanges();
     }
 }

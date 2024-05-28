@@ -24,29 +24,30 @@ namespace LibraryData.Services
             _logger = logger;
         }
 
-        public async Task<IActionResult> AddStudent(Student student)
+        public async Task<(HttpStatusCode, bool)> AddStudent(Student student)
         {
             try
             {
-                if (student == null)
+                if (student != null)
                 {
-                    return new BadRequestObjectResult("All fields are mandatory");
-                }
-                else
-                {
-                    var existingStudent = await _libraryContext.Students.Where(u => u.Username == student.Username).ToListAsync();
-                    if(existingStudent.Any() || existingStudent != null)
+                    var existingStudent = await _libraryContext.Students.Where(u => u.Firstname == student.Firstname).ToListAsync();
+                    if (existingStudent.Any() || existingStudent != null)
                     {
                         throw new ExistingUserException("User Already Exists");
                     }
+                    _libraryContext.Students.Add(student);
+                    SaveChanges();
+                    return (HttpStatusCode.OK, true);
                 }
-                _libraryContext.Students.Add(student);
-                SaveChanges();
-                return new OkObjectResult("User Added Successfully");
+                else
+                {
+                    return (HttpStatusCode.BadRequest, false);
+                }
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                return new InternalServerErrorResult();
+                Console.WriteLine($"Exception is thrown {ex}");
+                return (HttpStatusCode.BadRequest, false);
             }
         }
 

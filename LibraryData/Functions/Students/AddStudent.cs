@@ -14,6 +14,8 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using LibraryData.Utilities;
 using Microsoft.IdentityModel.Tokens;
 using LibraryData.Interface;
+using Azure.Core;
+using Newtonsoft.Json;
 
 namespace LibraryData.Functions.Students
 {
@@ -28,20 +30,40 @@ namespace LibraryData.Functions.Students
             _student = student;
         }
 
+        [Function("AddStudent")]
         [OpenApiOperation(operationId: "AddStudent", tags: new [] {""}, Visibility = OpenApiVisibilityType.Important)]
         [OpenApiRequestBody(contentType: "application/json", bodyType: typeof(Student), Required = true)]
-        [OpenApiResponseWithBody(statusCode: HttpStatusCode.OK, contentType: "text/plain", bodyType: typeof(IActionResult), Description = "Student Added Successfully")]
-        [OpenApiResponseWithBody(statusCode: HttpStatusCode.BadRequest, contentType: "text/plain", bodyType: typeof(IActionResult), Description = "Invalid Details")]
-        [Function("AddStudent")]
-        public async Task<IActionResult> AddStudentData([HttpTrigger(AuthorizationLevel.Anonymous, "post")] HttpRequestData req)
+        [OpenApiResponseWithBody(statusCode: HttpStatusCode.OK, contentType: "text/plain", bodyType: typeof(StatusCodeResult), Description = "Student Added Successfully")]
+        [OpenApiResponseWithBody(statusCode: HttpStatusCode.BadRequest, contentType: "text/plain", bodyType: typeof(StatusCodeResult), Description = "Invalid Details")]
+        public async Task<HttpResponseData> AddStudentData([HttpTrigger(AuthorizationLevel.Anonymous, "post")] HttpRequestData req)
         {
             _logger.LogInformation("C# HTTP trigger function processed a request.");
-            var student = await JsonHelper.DesrializeRequest<Student>(req);
-            if (student == null)
+
+            try
             {
-                return new BadRequestObjectResult("User fields are mandatory");
+                var request = await req.ReadAsStringAsync();
+                if (request == null)
+                {
+                    _logger.LogError("Request body is null");
+                    return req.CreateResponse(HttpStatusCode.BadRequest);
+                }
+                var student = JsonConvert.DeserializeObject<Student>(request);
+                if (student == null)
+                {
+                    return req.CreateResponse(HttpStatusCode.BadRequest);
+                }
+                var (statusCode, result) = await _student.AddStudent(student);
+                if(result)
+                {
+                    return req.CreateResponse(HttpStatusCode.OK);
+                }
+                return req.CreateResponse(HttpStatusCode.BadRequest);
             }
-            return await _student.AddStudent(student);
+            catch (Exception ex) 
+            {
+                var response = req.CreateResponse(HttpStatusCode.InternalServerError);
+                return response;
+            }
         }
     }
 }
