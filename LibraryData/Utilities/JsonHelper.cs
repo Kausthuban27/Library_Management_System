@@ -8,10 +8,6 @@ namespace LibraryData.Utilities
     {
         public static async Task<T> DesrializeRequest<T>(HttpRequestData request)
         {
-            if (request == null)
-            {
-                throw new ArgumentNullException(nameof(request));
-            }
             var requestContent = await request.ReadAsStringAsync();
             if(requestContent == null)
             {

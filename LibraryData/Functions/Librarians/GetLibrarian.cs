@@ -21,11 +21,11 @@ namespace LibraryData.Functions.Librarians
             _librarian = librarian;
         }
 
-        [Function("GetLibrarian")]
         [OpenApiOperation(operationId: "GetLibrarian", tags: new[] {""}, Visibility = OpenApiVisibilityType.Important)]
         [OpenApiParameter(name: "Username", In = ParameterLocation.Query, Required = true, Visibility = OpenApiVisibilityType.Important)]
-        [OpenApiResponseWithBody(statusCode: HttpStatusCode.OK, contentType: "text/plain", bodyType : typeof(string), Description = "Librarian Exists")]
-        [OpenApiResponseWithBody(statusCode: HttpStatusCode.BadRequest, contentType: "text/plain", bodyType: typeof(string), Description = "Invalid Details")]
+        [OpenApiResponseWithBody(statusCode: HttpStatusCode.OK, contentType: "text/plain", bodyType : typeof(IActionResult), Description = "Librarian Exists")]
+        [OpenApiResponseWithBody(statusCode: HttpStatusCode.BadRequest, contentType: "text/plain", bodyType: typeof(IActionResult), Description = "Invalid Details")]
+        [Function("GetLibrarian")]
         public async Task<IActionResult> GetLibrarianData([HttpTrigger(AuthorizationLevel.Anonymous, "get")] HttpRequestData req)
         {
             _logger.LogInformation("C# HTTP trigger function processed a request.");

@@ -8,6 +8,7 @@ using Microsoft.Azure.Functions.Worker.Http;
 using Microsoft.Azure.WebJobs.Extensions.OpenApi.Core.Attributes;
 using Microsoft.Azure.WebJobs.Extensions.OpenApi.Core.Enums;
 using Microsoft.Extensions.Logging;
+using Newtonsoft.Json;
 using System.Net;
 
 namespace LibraryData.Functions.Librarians
@@ -24,20 +25,30 @@ namespace LibraryData.Functions.Librarians
 
         [Function("AddLibrarian")]
         [OpenApiOperation(operationId: "AddLibrarian", tags: new[] {""}, Visibility = OpenApiVisibilityType.Important)]
-        [OpenApiRequestBody(contentType: "application/json", bodyType: typeof(Librarian), Required = true)]
+        [OpenApiRequestBody(contentType: "application/json", bodyType: typeof(AddNewLibrarian), Required = true)]
         [OpenApiResponseWithBody(statusCode: HttpStatusCode.OK, contentType: "text/plain", bodyType: typeof(string))]
         [OpenApiResponseWithBody(statusCode: HttpStatusCode.BadRequest, contentType: "text/plain", bodyType: typeof(string))]
         public async Task<HttpResponseData> AddLibrarianData([HttpTrigger(AuthorizationLevel.Anonymous, "post")] HttpRequestData req)
         {
             _logger.LogInformation("C# HTTP trigger function processed a request.");
-            var librarian = await JsonHelper.DesrializeRequest<Librarian>(req);
-            if(librarian == null)
+            try
             {
-                _logger.LogError("Invalid Details are provided");
-                return req.CreateResponse(HttpStatusCode.BadRequest);
+                var librarian = await JsonHelper.DesrializeRequest<AddNewLibrarian>(req);
+                var (statusCode, result) = await _librarian.AddLibrarian(librarian);
+                if (result)
+                {
+                    return req!.CreateResponse(statusCode);
+                }
+                else
+                {
+                    return req!.CreateResponse(statusCode);
+                }
             }
-            var (statusCode, result) = await _librarian.AddLibrarian(librarian);
-            return req.CreateResponse(statusCode);
+            catch (Exception ex)
+            {
+                _logger.LogError($"AddLibrarian Failed with exception {ex}");
+                return req.CreateResponse(HttpStatusCode.InternalServerError);
+            }
         }
     }
 }

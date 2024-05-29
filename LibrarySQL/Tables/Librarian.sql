@@ -7,6 +7,6 @@
     [Email] NVARCHAR(50) NOT NULL,
     [Password] NVARCHAR(100) NOT NULL,
     [Phone] NVARCHAR(10) NOT NULL,
-    [DateOfJoining] DATE NOT NULL,
+    [DateOfJoining] DATETIME NOT NULL,
     CONSTRAINT CK_Librarian CHECK (LEN(Phone) = 10 AND Phone NOT LIKE '%[^0-9]%')
 )

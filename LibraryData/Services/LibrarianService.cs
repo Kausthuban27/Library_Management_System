@@ -1,6 +1,8 @@
-﻿using LibraryData.Exceptions;
+﻿using AutoMapper;
+using LibraryData.Exceptions;
 using LibraryData.Interface;
 using LibraryData.Models;
+using LibraryData.Utilities;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
@@ -22,18 +24,20 @@ namespace LibraryData.Services
             _libraryContext = librarydbContext;
             _logger = logger;
         }
-        public async Task<(HttpStatusCode, bool)> AddLibrarian(Librarian librarian)
+        public async Task<(HttpStatusCode, bool)> AddLibrarian(AddNewLibrarian librarian)
         {
             try
             {
                 if (librarian != null)
                 {
                     var existingLibrarian = await _libraryContext.Librarians.Where(u => u.Username == librarian.Username).ToListAsync();
-                    if (existingLibrarian != null && existingLibrarian.Any())
+                    if (existingLibrarian.Any())
                     {
                         throw new ExistingUserException("User Already Exists");
                     }
-                    _libraryContext.Librarians.Add(librarian);
+                    var librarianMap = LibrarianMapper.MapLibrarian<Librarian>(librarian);
+                    Console.WriteLine($"Librarian Map {librarianMap}");
+                    _libraryContext.Librarians.Add(librarianMap);
                     _libraryContext.SaveChanges();
                     return (HttpStatusCode.OK, true);
                 }
@@ -45,7 +49,7 @@ namespace LibraryData.Services
             catch (Exception ex)
             {
                 _logger.LogError($"Add Librarian : Unexpected Error occurred {ex}");
-                return (HttpStatusCode.BadRequest, false); 
+                return (HttpStatusCode.InternalServerError, false); 
             }
         }
 

@@ -12,6 +12,6 @@ namespace LibraryData.Interface
     public interface ILibrarian
     {
         Task<IActionResult> GetLibrarian(string username);
-        Task<(HttpStatusCode, bool)> AddLibrarian(Librarian librarian);
+        Task<(HttpStatusCode, bool)> AddLibrarian(AddNewLibrarian librarian);
     }
 }
