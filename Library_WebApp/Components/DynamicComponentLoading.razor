@@ -1,5 +1,4 @@
-﻿@inject NavigationManager navigator
-@code
+﻿@code
 {
     [Parameter]
     public string Role { get; set; } = null!;
@@ -13,7 +12,7 @@
     <StudentLogin OnCancel="OnCancel" />
 }
 
-else if(Role.Equals("Librarian", StringComparison.OrdinalIgnoreCase))
+else if (Role.Equals("Librarian", StringComparison.OrdinalIgnoreCase))
 {
     <LibrarianLogin OnCancel="OnCancel" />
 }

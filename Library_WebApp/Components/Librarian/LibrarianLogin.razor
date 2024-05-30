@@ -1,4 +1,7 @@
-﻿@if (showRegistrationForm)
+﻿@inject ILibrarianService _librarianService
+@inject NavigationManager navigator
+@inject UserStateManagementService _userStateManagemet
+@if (showRegistrationForm)
 {
     <h3 class="text-center">Librarian Registration</h3>
     <div class="container d-flex justify-content-center align-items-center mt-5">
@@ -11,7 +14,7 @@
                     <InputText class="form-control" type="text" id="firstname" @bind-Value=librarian.firstname placeholder="Enter the Firstname" />
                 </div><div class="mb-3">
                     <label for="lastname" class="form-label fw-bold">Lastname:</label>
-                    <InputText class="form-control" type="text" id="lastname" @bind-Value=librarian.username placeholder="Enter the Lastname" />
+                    <InputText class="form-control" type="text" id="lastname" @bind-Value=librarian.lastname placeholder="Enter the Lastname" />
                 </div><div class="mb-3">
                     <label for="username" class="form-label fw-bold">Username:</label>
                     <InputText class="form-control" type="text" id="username" @bind-Value=librarian.username placeholder="Enter the Username" />
@@ -27,10 +30,6 @@
                 <div class="mb-3">
                     <label for="phone" class="form-label fw-bold">Phone:</label>
                     <InputText class="form-control" type="text" id="phone" @bind-Value=librarian.phone placeholder="Enter the Phone number" />
-                </div>
-                <div class="mb-3">
-                    <label for="dateOfJoining" class="form-label fw-bold">DOJ:</label>
-                    <InputDate TValue="DateOnly" class="form-control" id="dateOfJoining" @bind-Value="librarian.DateOfJoining" placeholder="Enter the date"></InputDate>
                 </div>
                 <div class="mb-3 d-grid gap-2 d-md-flex justify-content-md-center">
                     <button class="btn btn-primary" type="submit">Submit</button>
@@ -49,16 +48,16 @@ else
     <h3 class="text-center">Librarian Login</h3>
     <div class="container d-flex justify-content-center align-items-center mt-5">
         <div class="border rounded p-4 w-50">
-            <EditForm FormName="UserLogin" Model="addUser" OnSubmit="ValidateUser">
+            <EditForm FormName="UserLogin" Model="getUser" OnSubmit="ValidateUser">
                 <DataAnnotationsValidator />
                 <ValidationSummary />
                 <div class="mb-3">
                     <label for="username" class="form-label fw-bold">Username:</label>
-                    <InputText class="form-control" type="text" id="username" @bind-Value=addUser.username placeholder="Enter the Username" />
+                    <InputText class="form-control" type="text" id="username" @bind-Value=getUser.Username placeholder="Enter the Username" />
                 </div>
                 <div class="mb-3">
                     <label for="password" class="form-label fw-bold">Password:</label>
-                    <InputText class="form-control" type="password" id="password" @bind-Value=addUser.password placeholder="Enter the Password" />
+                    <InputText class="form-control" type="password" id="password" @bind-Value=getUser.Password placeholder="Enter the Password" />
                 </div>
                 <div class="mb-3 d-grid gap-2 d-md-flex justify-content-md-center">
                     <button class="btn btn-primary" type="submit">Submit</button>
@@ -71,24 +70,45 @@ else
         </div>
     </div>
 }
+<h5 class="text-center">@msg</h5>
 
 @code
 {
-    public AddNewStudent addUser { get; set; } = new();
+    public GetExistingLibrarian getUser { get; set; } = new();
     public Librarian librarian { get; set; } = new();
+    string? msg;
 
     [Parameter]
-    public EventCallback OnCancel { get; set; }
+    public EventCallback OnCancel { get; set; } 
 
     public bool showRegistrationForm = false;
 
-    private void ValidateUser()
+    private async Task ValidateUser()
     {
-
+        var response = await _librarianService.GetExistingLibrarian(getUser.Username, getUser.Password);
+        if(response.Item2)
+        {
+            _userStateManagemet.username = getUser.Username;
+            _userStateManagemet.isLoggedIn = true;
+            navigator.NavigateTo("/librarian");
+        }
+        else
+        {
+            msg = "Invalid Credentials";
+        }
     }
 
-    private void AddNewUser()
+    private async Task AddNewUser()
     {
-
+        var response = await _librarianService.AddNewLibrarian(librarian);
+        if(response.Item2)
+        {
+            msg = "Successfully Logged In";
+            showRegistrationForm = !showRegistrationForm;
+        }
+        else
+        {
+            msg = "Error Occured";
+        }
     }
 }

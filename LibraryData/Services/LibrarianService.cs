@@ -36,7 +36,6 @@ namespace LibraryData.Services
                         throw new ExistingUserException("User Already Exists");
                     }
                     var librarianMap = LibrarianMapper.MapLibrarian<Librarian>(librarian);
-                    Console.WriteLine($"Librarian Map {librarianMap}");
                     _libraryContext.Librarians.Add(librarianMap);
                     _libraryContext.SaveChanges();
                     return (HttpStatusCode.OK, true);
@@ -53,12 +52,12 @@ namespace LibraryData.Services
             }
         }
 
-        public async Task<IActionResult> GetLibrarian(string username)
+        public async Task<IActionResult> GetLibrarian(string username, string password)
         {
             try
             {
-                var librarian = await _libraryContext.Librarians.Where(u => u.Username == username).ToListAsync();
-                if (librarian != null && librarian.Any())
+                var librarian = await _libraryContext.Librarians.Where(u => u.Username == username && u.Password == password).ToListAsync();
+                if (librarian.Any() && librarian != null)
                 {
                     return new OkObjectResult("Librarian Exists");
                 }

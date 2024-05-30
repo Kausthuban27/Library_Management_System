@@ -96,7 +96,7 @@ else
 
     public bool showRegistrationForm = false;
 
-    async void ValidateUser()
+    private async Task ValidateUser()
     {
         var username = getUser.Username;
         var password = getUser.Password;
@@ -114,12 +114,12 @@ else
         }
     }
 
-    private async void AddNewUser()
+    private async Task AddNewUser()
     {
         var response = await _student.AddNewStudent(addUser);
         if(response.Item2)
         {
-            showRegistrationForm = true;
+            showRegistrationForm = !showRegistrationForm;
         }
     }
 }

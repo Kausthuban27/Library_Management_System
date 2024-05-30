@@ -23,13 +23,14 @@ namespace LibraryData.Functions.Librarians
 
         [OpenApiOperation(operationId: "GetLibrarian", tags: new[] {""}, Visibility = OpenApiVisibilityType.Important)]
         [OpenApiParameter(name: "Username", In = ParameterLocation.Query, Required = true, Visibility = OpenApiVisibilityType.Important)]
+        [OpenApiParameter(name: "Password", In = ParameterLocation.Query, Required = true, Visibility = OpenApiVisibilityType.Important)]
         [OpenApiResponseWithBody(statusCode: HttpStatusCode.OK, contentType: "text/plain", bodyType : typeof(IActionResult), Description = "Librarian Exists")]
         [OpenApiResponseWithBody(statusCode: HttpStatusCode.BadRequest, contentType: "text/plain", bodyType: typeof(IActionResult), Description = "Invalid Details")]
         [Function("GetLibrarian")]
         public async Task<IActionResult> GetLibrarianData([HttpTrigger(AuthorizationLevel.Anonymous, "get")] HttpRequestData req)
         {
             _logger.LogInformation("C# HTTP trigger function processed a request.");
-            return await _librarian.GetLibrarian(req.Query["Username"]!);
+            return await _librarian.GetLibrarian(req.Query["Username"]!, req.Query["Password"]!);
         }
     }
 }

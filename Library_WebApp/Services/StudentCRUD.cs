@@ -28,7 +28,6 @@ namespace Library_WebApp.Services
                 Content = new StringContent(json, Encoding.UTF8, "application/json")
             };
 
-            Console.WriteLine(request);
             HttpResponseMessage response = await _httpClient.SendAsync(request);
             if (response.IsSuccessStatusCode)
             {

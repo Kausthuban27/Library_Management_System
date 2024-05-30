@@ -28,7 +28,5 @@ namespace Library_WebApp.Model
         [RegularExpression(@"^\(?\d{3}?\)??-??\(?\d{3}?\)??-??\(?\d{4}?\)??-?$", ErrorMessage = "Phone number should be in 111-111-1111 format")]
         [StringLength(10, ErrorMessage = "Phone number cannot be more than 10")]
         public string phone { get; set; } = null!;
-
-        public DateOnly DateOfJoining { get; set; }
     }
 }
