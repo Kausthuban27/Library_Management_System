@@ -2,14 +2,14 @@
 
 namespace Library_WebApp.Model
 {
-    public class AddUser
+    public class GetExistingStudent
     { 
         [StringLength(20, ErrorMessage = "Username cannot be more than 20")]
-        [Required(ErrorMessage ="Username is Mandatory")]
-        public string username { get; set; } = null!;
+        [Required(ErrorMessage = "Username is Mandatory")]
+        public string Username { get; set; } = null!;
 
         [StringLength(20, ErrorMessage = "Password cannot be more than 20")]
         [Required(ErrorMessage = "Password is Mandatory")]
-        public string password { get; set; } = null!;
+        public string Password { get; set; } = null!;
     }
 }

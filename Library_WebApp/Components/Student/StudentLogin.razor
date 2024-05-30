@@ -3,26 +3,26 @@
     <h3 class="text-center">Student Registration</h3>
     <div class="container d-flex justify-content-center align-items-center mt-5">
         <div class="border rounded p-4 w-50">
-            <EditForm FormName="RegisterForm" Model="getUser" OnSubmit="AddNewUser">
+            <EditForm FormName="RegisterForm" Model="addUser" OnSubmit="AddNewUser">
                 <DataAnnotationsValidator />
                 <ValidationSummary />
                 <div class="mb-3">
                     <label for="firstname" class="form-label fw-bold">Firstname:</label>
-                    <InputText class="form-control" type="text" id="firstname" @bind-Value=getUser.firstname placeholder="Enter the Firstname" />
+                    <InputText class="form-control" type="text" id="firstname" @bind-Value=addUser.Firstname placeholder="Enter the Firstname" />
                 </div><div class="mb-3">
                     <label for="lastname" class="form-label fw-bold">Lastname:</label>
-                    <InputText class="form-control" type="text" id="lastname" @bind-Value=getUser.username placeholder="Enter the Lastname" />
+                    <InputText class="form-control" type="text" id="lastname" @bind-Value=addUser.Lastname placeholder="Enter the Lastname" />
                 </div><div class="mb-3">
                     <label for="username" class="form-label fw-bold">Username:</label>
-                    <InputText class="form-control" type="text" id="username" @bind-Value=getUser.username placeholder="Enter the Username" />
+                    <InputText class="form-control" type="text" id="username" @bind-Value=addUser.Username placeholder="Enter the Username" />
                 </div>
                 <div class="mb-3">
                     <label for="password" class="form-label fw-bold">Password:</label>
-                    <InputText class="form-control" type="password" id="password" @bind-Value=getUser.password placeholder="Enter the Password" />
+                    <InputText class="form-control" type="password" id="password" @bind-Value=addUser.Password placeholder="Enter the Password" />
                 </div>
                 <div class="mb-3">
                     <label for="department" class="form-label fw-bold">Department:</label>
-                    <BSInput id="department" Class="form-select" InputType="InputType.Select" @bind-Value=getUser.department>
+                    <BSInput id="department" Class="form-select" InputType="InputType.Select" @bind-Value=addUser.Department>
                         <option value="Computer Science Engineering">CSE</option>
                         <option value="Information Technology">IT</option>
                         <option value="Electrical and Electronics Engineering">EEE</option>
@@ -33,7 +33,7 @@
                 </div>
                 <div class="mb-3">
                     <label for="year" class="form-label fw-bold">Year:</label>
-                    <BSInput id="year" Class="form-select" InputType="InputType.Select" @bind-Value=getUser.year>
+                    <BSInput id="year" Class="form-select" InputType="InputType.Select" @bind-Value=addUser.Year>
                         <option value="1">I</option>
                         <option value="2">II</option>
                         <option value="3">III</option>
@@ -57,16 +57,16 @@ else
     <h3 class="text-center">Student Login</h3>
     <div class="container d-flex justify-content-center align-items-center mt-5">
         <div class="border rounded p-4 w-50">
-            <EditForm FormName="UserLogin" Model="addUser" OnSubmit="ValidateUser">
+            <EditForm FormName="UserLogin" Model="getUser" OnSubmit="ValidateUser">
                 <DataAnnotationsValidator />
                 <ValidationSummary />
                 <div class="mb-3">
                     <label for="username" class="form-label fw-bold">Username:</label>
-                    <InputText class="form-control" type="text" id="username" @bind-Value=addUser.username placeholder="Enter the Username" />
+                    <InputText class="form-control" type="text" id="username" @bind-Value=getUser.Username placeholder="Enter the Username" />
                 </div>
                 <div class="mb-3">
                     <label for="password" class="form-label fw-bold">Password:</label>
-                    <InputText class="form-control" type="password" id="password" @bind-Value=addUser.password placeholder="Enter the Password" />
+                    <InputText class="form-control" type="password" id="password" @bind-Value=getUser.Password placeholder="Enter the Password" />
                 </div>
                 <div class="mb-3 d-grid gap-2 d-md-flex justify-content-md-center">
                     <button class="btn btn-primary" type="submit">Submit</button>
@@ -82,8 +82,8 @@ else
 
 @code 
 {
-    public AddUser addUser { get; set; } = new();
-    public GetUser getUser { get; set; } = new();
+    public AddNewStudent addUser { get; set; } = new();
+    public GetExistingStudent getUser { get; set; } = new();
 
     [Parameter]
     public EventCallback OnCancel { get; set; }

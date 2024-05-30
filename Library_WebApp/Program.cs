@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Web;
 using BlazorStrap;
+using Library_WebApp.Model;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -9,6 +10,7 @@ builder.Services.AddRazorPages();
 builder.Services.AddServerSideBlazor();
 builder.Services.AddBlazorStrap();
 
+builder.Services.Configure<LibraryDataConfiguration>(builder.Configuration.GetSection("LibraryDataApi"));
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
