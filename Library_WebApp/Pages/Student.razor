@@ -1,7 +1,21 @@
 ﻿@page "/student"
+@inject UserStateManagementService _userStateManagement
+@inject NavigationManager navigator
 
-<h3>Student</h3>
+<CascadingValue Value="_userStateManagement">
+    @if(_userStateManagement.isLoggedIn)
+    {
+        <button style="width:5%;float:right;margin-top:-1.5rem;" @onclick="LogOut">Logout</button>
+        <h3>Welcome @_userStateManagement.username</h3>
+    }
+</CascadingValue>
+
 
 @code
 {
+    private void LogOut()
+    {
+        _userStateManagement.clear();
+        navigator.NavigateTo("/");
+    }
 }

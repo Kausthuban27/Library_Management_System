@@ -16,7 +16,6 @@ namespace Library_WebApp.Services.HttpServices
             _studentCRUD = studentCRUD;
             if(_libraryconfig.baseUrl == null)
             {
-                Console.Write(_libraryconfig.baseUrl);
                 throw new ArgumentNullException((nameof(libraryOptions)));
             }
             var BaseUrl = new Uri(_libraryconfig.baseUrl, UriKind.Absolute);
@@ -24,14 +23,14 @@ namespace Library_WebApp.Services.HttpServices
             _loginUrl = new(BaseUrl, RouteConstants.Loginstudent);
         }
 
-        public Task<(HttpStatusCode, bool)> AddNewStudent<T>(Uri BaseUrl, T entity) where T : class
+        public async Task<(HttpStatusCode, bool)> AddNewStudent<T>(T entity) where T : class
         {
-            throw new NotImplementedException();
+            return await _studentCRUD.AddStudent(_registerUrl, entity);
         }
 
-        public async Task<(HttpStatusCode, bool)> GetExistingStudent(string username)
+        public async Task<(HttpStatusCode, bool)> GetExistingStudent(string username, string password)
         {
-            return await _studentCRUD.GetStudent(_loginUrl, username);
+            return await _studentCRUD.GetStudent(_loginUrl, username, password);
         }
     }
 }

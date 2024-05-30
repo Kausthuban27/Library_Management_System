@@ -11,6 +11,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using System.Web.Http;
 using Microsoft.Extensions.Logging;
+using LibraryData.Utilities;
 
 namespace LibraryData.Services
 {
@@ -24,7 +25,7 @@ namespace LibraryData.Services
             _logger = logger;
         }
 
-        public async Task<(HttpStatusCode, bool)> AddStudent(Student student)
+        public async Task<(HttpStatusCode, bool)> AddStudent(AddNewStudent student)
         {
             try
             {
@@ -35,7 +36,8 @@ namespace LibraryData.Services
                     {
                         throw new ExistingUserException("User Already Exists");
                     }
-                    _libraryContext.Students.Add(student);
+                    var newStudent = LibrarianMapper.MapStudent<Student>(student);
+                    _libraryContext.Students.Add(newStudent);
                     SaveChanges();
                     return (HttpStatusCode.OK, true);
                 }
@@ -51,12 +53,12 @@ namespace LibraryData.Services
             }
         }
 
-        public async Task<IActionResult> GetStudent(string username)
+        public async Task<IActionResult> GetStudent(string username, string password)
         {
             try
             {
-                var existingStudent = await _libraryContext.Students.Where(u => u.Username == username).ToListAsync();
-                if (existingStudent.Any() || existingStudent != null)
+                var existingStudent = await _libraryContext.Students.Where(u => u.Username == username && u.Password == password).ToListAsync();
+                if (existingStudent.Any())
                 {
                     return new OkObjectResult("User Exists");
                 }

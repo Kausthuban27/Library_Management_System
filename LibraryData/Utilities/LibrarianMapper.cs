@@ -28,5 +28,13 @@ namespace LibraryData.Utilities
             }
             return _mapper.Map<T>(librarian);
         }
+        public static T MapStudent<T>(AddNewStudent student)
+        {
+            if (_mapper == null)
+            {
+                throw new InvalidOperationException("Mapper is not initialized. Call Initialize method first.");
+            }
+            return _mapper.Map<T>(student);
+        }
     }
 }

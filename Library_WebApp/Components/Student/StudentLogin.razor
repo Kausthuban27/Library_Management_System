@@ -1,5 +1,6 @@
 ﻿@inject NavigationManager navigator
 @inject IStudentService _student
+@inject UserStateManagementService _userStateManagement
 
 @if (showRegistrationForm)
 {
@@ -11,32 +12,32 @@
                 <ValidationSummary />
                 <div class="mb-3">
                     <label for="firstname" class="form-label fw-bold">Firstname:</label>
-                    <InputText class="form-control" type="text" id="firstname" @bind-Value=addUser.Firstname placeholder="Enter the Firstname" />
+                    <InputText class="form-control" type="text" id="firstname" @bind-Value=addUser.firstname placeholder="Enter the Firstname" />
                 </div><div class="mb-3">
                     <label for="lastname" class="form-label fw-bold">Lastname:</label>
-                    <InputText class="form-control" type="text" id="lastname" @bind-Value=addUser.Lastname placeholder="Enter the Lastname" />
+                    <InputText class="form-control" type="text" id="lastname" @bind-Value=addUser.lastname placeholder="Enter the Lastname" />
                 </div><div class="mb-3">
                     <label for="username" class="form-label fw-bold">Username:</label>
-                    <InputText class="form-control" type="text" id="username" @bind-Value=addUser.Username placeholder="Enter the Username" />
+                    <InputText class="form-control" type="text" id="username" @bind-Value=addUser.username placeholder="Enter the Username" />
                 </div>
                 <div class="mb-3">
                     <label for="password" class="form-label fw-bold">Password:</label>
-                    <InputText class="form-control" type="password" id="password" @bind-Value=addUser.Password placeholder="Enter the Password" />
+                    <InputText class="form-control" type="password" id="password" @bind-Value=addUser.password placeholder="Enter the Password" />
                 </div>
                 <div class="mb-3">
                     <label for="department" class="form-label fw-bold">Department:</label>
-                    <BSInput id="department" Class="form-select" InputType="InputType.Select" @bind-Value=addUser.Department>
-                        <option value="Computer Science Engineering">CSE</option>
-                        <option value="Information Technology">IT</option>
-                        <option value="Electrical and Electronics Engineering">EEE</option>
-                        <option value="Electrical and Communication Engineering">ECE</option>
-                        <option value="Artificial Intelligence and Data Science">AIDS</option>
-                        <option value="Mechanical Engineering">MECH</option>
+                    <BSInput id="department" Class="form-select" InputType="InputType.Select" @bind-Value=addUser.department>
+                        <option value="CSE">CSE</option>
+                        <option value="IT">IT</option>
+                        <option value="EEE">EEE</option>
+                        <option value="ECE">ECE</option>
+                        <option value="AIDS">AIDS</option>
+                        <option value="MECH">MECH</option>
                     </BSInput>
                 </div>
                 <div class="mb-3">
                     <label for="year" class="form-label fw-bold">Year:</label>
-                    <BSInput id="year" Class="form-select" InputType="InputType.Select" @bind-Value=addUser.Year>
+                    <BSInput id="year" Class="form-select" InputType="InputType.Select" @bind-Value=addUser.year>
                         <option value="1">I</option>
                         <option value="2">II</option>
                         <option value="3">III</option>
@@ -80,7 +81,7 @@ else
                 </div>
             </EditForm>
         </div>
-        <h5>Login Failed : @err_msg</h5>
+       <h5>@err_msg</h5>
     </div>
  }
 
@@ -98,9 +99,13 @@ else
     async void ValidateUser()
     {
         var username = getUser.Username;
-        var response = await _student.GetExistingStudent(username);
+        var password = getUser.Password;
+        Console.WriteLine(username);
+        var response = await _student.GetExistingStudent(username, password);
         if(response.Item2)
         {
+            _userStateManagement.username = username;
+            _userStateManagement.isLoggedIn = true;
             navigator.NavigateTo("/student");
         }
         else
@@ -109,8 +114,12 @@ else
         }
     }
 
-    private void AddNewUser()
+    private async void AddNewUser()
     {
-        
+        var response = await _student.AddNewStudent(addUser);
+        if(response.Item2)
+        {
+            showRegistrationForm = true;
+        }
     }
 }

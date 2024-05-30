@@ -32,7 +32,8 @@ namespace LibraryData.Functions.Students
         {
             _logger.LogInformation("C# HTTP trigger function processed a request.");
             string username = req.Query["username"]!;
-            return await _studentService.GetStudent(username);
+            string password = req.Query["password"]!;
+            return await _studentService.GetStudent(username, password);
         }
     }
 }

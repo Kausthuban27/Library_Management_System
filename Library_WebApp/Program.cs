@@ -14,6 +14,7 @@ builder.Services.AddBlazorStrap();
 
 builder.Services.AddScoped<IStudentCRUD, StudentCRUD>();
 builder.Services.AddScoped<IStudentService, StudentService>();
+builder.Services.AddSingleton<UserStateManagementService>();
 builder.Services.AddHttpClient();
 builder.Services.Configure<LibraryDataConfiguration>(builder.Configuration.GetSection("LibraryDataApi"));
 var app = builder.Build();

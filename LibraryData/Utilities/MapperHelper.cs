@@ -15,6 +15,9 @@ namespace LibraryData.Utilities
             CreateMap<AddNewLibrarian, Librarian>()
                 .ForMember(dest => dest.Id, opt => opt.Ignore())
                 .ForMember(dest => dest.DateOfJoining, opt => opt.Ignore());
+
+            CreateMap<AddNewStudent, Student>()
+                .ForMember(dest => dest.Id, opt => opt.Ignore());
         }
     }
 }

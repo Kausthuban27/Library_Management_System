@@ -1,5 +1,8 @@
 ﻿using Library_WebApp.Model;
+using Microsoft.AspNetCore.Identity;
 using System.Net;
+using System.Text;
+using System.Text.Json;
 using System.Web;
 
 namespace Library_WebApp.Services
@@ -13,18 +16,35 @@ namespace Library_WebApp.Services
             _httpClient = httpClientFactory.CreateClient("baseUrl");
             _logger = logger;
         }
-        public Task<(HttpStatusCode, bool)> AddStudent<T>(Uri BaseUrl, T entity) where T : class
+        public async Task<(HttpStatusCode, bool)> AddStudent<T>(Uri BaseUrl, T entity) where T : class
         {
-            throw new NotImplementedException();
+            string json = JsonSerializer.Serialize(entity);
+
+            Console.WriteLine(json);
+            var request = new HttpRequestMessage
+            {
+                Method = HttpMethod.Post,
+                RequestUri = BaseUrl,
+                Content = new StringContent(json, Encoding.UTF8, "application/json")
+            };
+
+            Console.WriteLine(request);
+            HttpResponseMessage response = await _httpClient.SendAsync(request);
+            if (response.IsSuccessStatusCode)
+            {
+                return (HttpStatusCode.OK, true);
+            }
+            Console.WriteLine(response.Content);
+            return (HttpStatusCode.BadRequest, false);
         }
 
-        public async Task<(HttpStatusCode, bool)> GetStudent(Uri BaseUrl, string username)
+        public async Task<(HttpStatusCode, bool)> GetStudent(Uri BaseUrl, string username, string password)
         {
             UriBuilder uriBuilder = new UriBuilder(BaseUrl);
             var query = HttpUtility.ParseQueryString(uriBuilder.Query);
-            query[username] = username;
+            query["username"] = username;
+            query["password"] = password;
             uriBuilder.Query = query.ToString();
-
             HttpResponseMessage response = await _httpClient.GetAsync(uriBuilder.Uri);
             if(response.IsSuccessStatusCode)
             {

@@ -32,7 +32,7 @@ namespace LibraryData.Functions.Students
 
         [Function("AddStudent")]
         [OpenApiOperation(operationId: "AddStudent", tags: new [] {""}, Visibility = OpenApiVisibilityType.Important)]
-        [OpenApiRequestBody(contentType: "application/json", bodyType: typeof(Student), Required = true)]
+        [OpenApiRequestBody(contentType: "application/json", bodyType: typeof(AddNewStudent), Required = true)]
         [OpenApiResponseWithBody(statusCode: HttpStatusCode.OK, contentType: "text/plain", bodyType: typeof(string), Description = "Student Added Successfully")]
         [OpenApiResponseWithBody(statusCode: HttpStatusCode.BadRequest, contentType: "text/plain", bodyType: typeof(string), Description = "Invalid Details")]
         public async Task<HttpResponseData> AddStudentData([HttpTrigger(AuthorizationLevel.Anonymous, "post")] HttpRequestData req)
@@ -41,7 +41,8 @@ namespace LibraryData.Functions.Students
 
             try
             {
-                var student = await JsonHelper.DesrializeRequest<Student>(req);
+                var student = await JsonHelper.DesrializeRequest<AddNewStudent>(req);
+
                 var (statusCode, result) = await _student.AddStudent(student);
                 if(result)
                 {
