@@ -2,6 +2,8 @@ using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Web;
 using BlazorStrap;
 using Library_WebApp.Model;
+using Library_WebApp.Services;
+using Library_WebApp.Services.HttpServices;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -10,6 +12,9 @@ builder.Services.AddRazorPages();
 builder.Services.AddServerSideBlazor();
 builder.Services.AddBlazorStrap();
 
+builder.Services.AddScoped<IStudentCRUD, StudentCRUD>();
+builder.Services.AddScoped<IStudentService, StudentService>();
+builder.Services.AddHttpClient();
 builder.Services.Configure<LibraryDataConfiguration>(builder.Configuration.GetSection("LibraryDataApi"));
 var app = builder.Build();
 

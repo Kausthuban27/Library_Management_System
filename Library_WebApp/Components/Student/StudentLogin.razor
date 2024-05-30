@@ -1,4 +1,7 @@
-﻿@if (showRegistrationForm)
+﻿@inject NavigationManager navigator
+@inject IStudentService _student
+
+@if (showRegistrationForm)
 {
     <h3 class="text-center">Student Registration</h3>
     <div class="container d-flex justify-content-center align-items-center mt-5">
@@ -77,6 +80,7 @@ else
                 </div>
             </EditForm>
         </div>
+        <h5>Login Failed : @err_msg</h5>
     </div>
  }
 
@@ -84,15 +88,25 @@ else
 {
     public AddNewStudent addUser { get; set; } = new();
     public GetExistingStudent getUser { get; set; } = new();
+    string? err_msg;
 
     [Parameter]
     public EventCallback OnCancel { get; set; }
 
     public bool showRegistrationForm = false;
 
-    private void ValidateUser()
+    async void ValidateUser()
     {
-
+        var username = getUser.Username;
+        var response = await _student.GetExistingStudent(username);
+        if(response.Item2)
+        {
+            navigator.NavigateTo("/student");
+        }
+        else
+        {
+            err_msg = "Invalid User credentials";
+        }
     }
 
     private void AddNewUser()

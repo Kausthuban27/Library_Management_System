@@ -54,11 +54,11 @@ else
                 <ValidationSummary />
                 <div class="mb-3">
                     <label for="username" class="form-label fw-bold">Username:</label>
-                    <InputText class="form-control" type="text" id="username" @bind-Value=addUser.username placeholder="Enter the Username" />
+                    <InputText class="form-control" type="text" id="username" @bind-Value=addUser.Username placeholder="Enter the Username" />
                 </div>
                 <div class="mb-3">
                     <label for="password" class="form-label fw-bold">Password:</label>
-                    <InputText class="form-control" type="password" id="password" @bind-Value=addUser.password placeholder="Enter the Password" />
+                    <InputText class="form-control" type="password" id="password" @bind-Value=addUser.Password placeholder="Enter the Password" />
                 </div>
                 <div class="mb-3 d-grid gap-2 d-md-flex justify-content-md-center">
                     <button class="btn btn-primary" type="submit">Submit</button>
@@ -74,7 +74,7 @@ else
 
 @code
 {
-    public AddUser addUser { get; set; } = new();
+    public AddNewStudent addUser { get; set; } = new();
     public Librarian librarian { get; set; } = new();
 
     [Parameter]
