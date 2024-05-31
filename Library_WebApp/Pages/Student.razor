@@ -5,17 +5,38 @@
 <CascadingValue Value="_userStateManagement">
     @if(_userStateManagement.isLoggedIn)
     {
-        <button class ="btn btn-primary" style="width:5%;float:right;margin-top:-1.5rem;" @onclick="LogOut">Logout</button>
-        <h3>Welcome @_userStateManagement.username</h3>
+        <div class="d-flex flex-row text-center justify-content-evenly">
+            <h3>Welcome @_userStateManagement.username</h3>
+            <button class="btn btn-primary" style="width:5%;float:right;margin-top:-1.5rem;">Logout</button>
+        </div>
+        <div class="container-fluid">
+            <div class="row flex-nowrap">
+                <div class="col-auto col-md-3 col-lg-2 px-0">
+                    <StudentSidebar OnSectionChanged="HandleSectionChanged" CurrentSection="@currentSection"/>
+                </div>
+                <div class="col py-3">
+                    @if (sectionComponents.TryGetValue(currentSection, out var componentType))
+                    {
+                        <DynamicComponent Type="componentType" />
+                    }
+                </div>
+            </div>
+        </div>
     }
 </CascadingValue>
 
 
-@code
+@code 
 {
-    private void LogOut()
+    private string currentSection = "Home";
+    private readonly Dictionary<string, Type> sectionComponents = new()
     {
-        _userStateManagement.clear();
-        navigator.NavigateTo("/");
+        { "Search book", typeof(SearchBooks) },
+        { "Rent book", typeof(RentBook) }
+    };
+
+    private void HandleSectionChanged(string section)
+    {
+        currentSection = section;
     }
 }
