@@ -58,6 +58,7 @@
   <ItemGroup>
     <Folder Include="Properties" />
     <Folder Include="Tables" />
+    <Folder Include="Scripts" />
   </ItemGroup>
   <ItemGroup>
     <Build Include="Tables\BookDetails.sql" />
@@ -67,5 +68,9 @@
     <Build Include="Tables\Librarian.sql" />
     <Build Include="Tables\ReturnBook.sql" />
     <Build Include="Tables\Student.sql" />
+    <Build Include="Tables\SearchHistory.sql" />
+  </ItemGroup>
+  <ItemGroup>
+    <PreDeploy Include="Scripts\SearchHistory.PreDeployment1.sql" />
   </ItemGroup>
 </Project>

@@ -28,6 +28,7 @@
     private string currentSection = "Home";
     private readonly Dictionary<string, Type> sectionComponents = new()
     {
+        { "Home", typeof(StudentDashboard) },
         { "Search book", typeof(SearchBooks) },
         { "Rent book", typeof(RentBook) }
     };
