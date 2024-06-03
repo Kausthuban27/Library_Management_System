@@ -6,3 +6,4 @@
     [BookPublisher] NVARCHAR(100) NULL,
     [Category] NVARCHAR(100) NULL
 )
+
