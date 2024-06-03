@@ -7,12 +7,28 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Content Remove="Components\Student\StudentHome.razor" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="BlazorStrap" Version="5.1.102.51923" />
     <PackageReference Include="BlazorStrap.V5" Version="5.1.102.51723" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\LibraryData\LibraryData.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <UpToDateCheckInput Remove="Components\Student\StudentHome.razor" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <_ContentIncludedByDefault Remove="Components\Student\StudentHome.razor" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="Components\Student\StudentHome.razor" />
   </ItemGroup>
 
 

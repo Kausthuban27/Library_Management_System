@@ -6,14 +6,10 @@
 <CascadingValue Value="_userStateManagement">
     @if(_userStateManagement.isLoggedIn)
     {
-        <div class="d-flex flex-row text-center justify-content-evenly">
-            <h3>Welcome @_userStateManagement.username</h3>
-            <button class="btn btn-primary" style="width:5%;float:right;margin-top:-1.5rem;">Logout</button>
-        </div>
         <div class="container-fluid">
-            <div class="row">
-                <div class="col-md-3 col-lg-2 bg-light p-0">
-                    <StudentSidebar OnSectionChanged="HandleSectionChanged" CurrentSection="@currentSection" username="@_userStateManagement.username"/>
+            <div class="row flex-nowrap">
+                <div class="col-auto col-md-3 col-xl-2 px-sm-2 px-0 bg-dark h-100">
+                    <StudentSidebar LogOut="LogOut" OnSectionChanged="HandleSectionChanged" CurrentSection="@currentSection" username="@_userStateManagement.username"/>
                 </div>
                 <div class="col-md-9 col-lg-10 py-3">
                     @if (sectionComponents.TryGetValue(currentSection, out var componentType))
@@ -32,6 +28,7 @@
     private string currentSection = "Home";
     private readonly Dictionary<string, Type> sectionComponents = new()
     {
+        { "Home", typeof(StudentHome) },
         { "Search book", typeof(SearchBooks) },
         { "Rent book", typeof(RentBook) }
     };
@@ -39,5 +36,14 @@
     private void HandleSectionChanged(string section)
     {
         currentSection = section;
+    }
+
+    private void LogOut(bool isLogout)
+    {
+        if (isLogout)
+        {
+            navigator.NavigateTo("/");
+            _userStateManagement.clear();
+        }
     }
 }
