@@ -1,4 +1,4 @@
-﻿using Library_WebApp.Model;
+﻿using LibraryData.Models;
 using System.Net;
 
 namespace Library_WebApp.Services
@@ -10,6 +10,6 @@ namespace Library_WebApp.Services
         public Task<T> IssueBook<T>(Uri BaseUrl, T entity) where T : class;
         public Task<T> ReturnedBook<T>(Uri BaseUrl, T entity) where T: class;
         public Task<T> AddBook<T>(Uri BaseUrl, T entity) where T : class;
-        public Task CheckAvailability(Uri BaseUrl, SearchBook search);
+        public Task CheckAvailability(Uri BaseUrl, SearchBooks search);
     }
 }

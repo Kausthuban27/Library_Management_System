@@ -1,0 +1,73 @@
+﻿@code 
+{
+    [Parameter]
+    public EventCallback<string> OnSectionChanged { get; set; }
+
+    [Parameter]
+    public EventCallback<bool> LogOut { get; set; }
+
+    [Parameter]
+    public string CurrentSection { get; set; } = null!;
+
+    [Parameter]
+    public string username { get; set; } = null!;
+
+    private async Task NavigateToSection(string section)
+    {
+        await OnSectionChanged.InvokeAsync(section);
+    }
+
+    private async Task Logout(bool isLogout)
+    {
+        await LogOut.InvokeAsync(isLogout);
+    }
+
+    private string GetNavLinkClass(string section)
+    {
+        return CurrentSection == section ? "nav-link active text-white pe-auto" : "nav-link text-white pe-auto";
+    }
+}
+
+<div class="d-flex flex-column flex-shrink-0 p-3 text-white bg-dark" style="width: 280px; height: 100vh;">
+    <div class="text-white text-decoration-none">
+        <p class="fs-4 text-center mb-0">Welcome @username</p>
+    </div>
+    <hr>
+    <ul class="nav nav-pills flex-column mb-auto">
+        <li class="nav-item">
+            <div class='@GetNavLinkClass("Home")' @onclick='() => NavigateToSection("Home")'>
+                Home
+            </div>
+        </li>
+        <li class="nav-item">
+            <div class='@GetNavLinkClass("Search book")' @onclick='() => NavigateToSection("Search book")'>
+                Search a book
+            </div>
+        </li>
+        <li class="nav-item">
+            <div class='@GetNavLinkClass("Add book")' @onclick='() => NavigateToSection("Add book")'>
+                Add a book
+            </div>
+        </li>
+        <li class="nav-item">
+            <div class="nav-link text-white pe-auto" @onclick='() => Logout(true)'>
+                Logout
+            </div>
+        </li>
+    </ul>
+    <hr>
+    <div class="dropup">
+        <BSDropdown>
+            <Toggler>
+                <BSToggle IsButton="true" Color="BSColor.Default" class="rounded-3 text-white">
+                    <img src="/Images/person.svg" width="35" height="35" class="rounded-circle me-2" />
+                    @username
+                </BSToggle>
+            </Toggler>
+            <Content>
+                <BSDropdownItem>Account</BSDropdownItem>
+                <BSDropdownItem>Settings</BSDropdownItem>
+            </Content>
+        </BSDropdown>
+    </div>
+</div>

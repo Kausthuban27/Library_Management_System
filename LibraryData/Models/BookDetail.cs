@@ -2,11 +2,13 @@
 #nullable enable
 using System;
 using System.Collections.Generic;
+using System.Text.Json.Serialization;
 
 namespace LibraryData.Models;
 
 public partial class BookDetail
 {
+    [JsonIgnore]
     public int Id { get; set; }
 
     public string Bookname { get; set; } = null!;

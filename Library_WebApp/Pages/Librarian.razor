@@ -1,18 +1,42 @@
 ﻿@page "/librarian"
+@layout LibrarianLayout
 @inject UserStateManagementService _userStateManagement
 @inject NavigationManager navigator
 
 <CascadingValue Value="_userStateManagement">
     @if (_userStateManagement.isLoggedIn)
     {
-        <button class="btn btn-primary" style="width:5%;float:right;margin-top:-1.5rem;" @onclick="LogOut">Logout</button>
-        <h3>Welcome @_userStateManagement.username</h3>
+        <div class="container-fluid">
+            <div class="row flex-nowrap">
+                <div class="col-auto col-md-3 col-xl-2 px-sm-2 px-0 bg-dark h-100">
+                    <LibrarianSidebar LogOut="LogOut" OnSectionChanged="HandleSectionChanged" CurrentSection="@currentSection" username="@_userStateManagement.username" />
+                </div>
+                <div class="col-md-9 col-lg-10 py-3">
+                    @if (sectionComponents.TryGetValue(currentSection, out var componentType))
+                    {
+                        <DynamicComponent Type="componentType" />
+                    }
+                </div>
+            </div>
+        </div>
     }
 </CascadingValue>
 
 
 @code
 {
+    private string currentSection = "Home";
+    private readonly Dictionary<string, Type> sectionComponents = new()
+    {
+        { "Home", typeof(LibrarianDashboard) },
+        { "Search book", typeof(SearchBookRow) },
+        { "Add book", typeof(AddBook) }
+    };
+
+    private void HandleSectionChanged(string section)
+    {
+        currentSection = section;
+    }
     private void LogOut()
     {
         _userStateManagement.clear();

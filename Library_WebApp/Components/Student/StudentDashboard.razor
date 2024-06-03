@@ -2,6 +2,17 @@
 
 <div>
     <h3>Books Searched</h3>
+    <BSTable>
+            <BSTHead>
+                <BSTR>
+                    <BSTD>Id</BSTD>
+                    <BSTD>BookName</BSTD>
+                    <BSTD>BookAuthor</BSTD>
+                    <BSTD>BookPublisher</BSTD>
+                    <BSTD>BookCategory</BSTD>
+                </BSTR>
+            </BSTHead>
+    </BSTable>
 </div>
 
 <div>
@@ -10,5 +21,5 @@
 
 @code 
 {
-
+    public List<string>? Orders { get; set; }
 }
