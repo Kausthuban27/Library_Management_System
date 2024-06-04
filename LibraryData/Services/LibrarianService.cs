@@ -18,8 +18,8 @@ namespace LibraryData.Services
     public class LibrarianService : ILibrarian
     {
         private readonly ILogger<LibrarianService> _logger;
-        private readonly librarydbContext _libraryContext;
-        public LibrarianService(ILogger<LibrarianService> logger, librarydbContext librarydbContext)
+        private readonly LibrarydbContext _libraryContext;
+        public LibrarianService(ILogger<LibrarianService> logger, LibrarydbContext librarydbContext)
         {
             _libraryContext = librarydbContext;
             _logger = logger;

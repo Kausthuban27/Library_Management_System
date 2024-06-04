@@ -1,4 +1,5 @@
 ﻿using Library_WebApp.Model;
+using LibraryData.Models;
 using Microsoft.AspNetCore.Identity;
 using System.Net;
 using System.Text;
@@ -57,7 +58,7 @@ namespace Library_WebApp.Services
             throw new NotImplementedException();
         }
 
-        public Task<T> searchBook<T>(Uri BaseUrl, SearchBook search)
+        public Task<T> searchBook<T>(Uri BaseUrl, SearchBooks search)
         {
             throw new NotImplementedException();
         }

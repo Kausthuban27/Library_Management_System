@@ -1,6 +1,7 @@
 using LibraryData.Interface;
 using LibraryData.Models;
 using LibraryData.Services;
+using LibraryData.Services.BookServices;
 using LibraryData.Utilities;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Azure.Functions.Worker;
@@ -18,12 +19,13 @@ var host = new HostBuilder()
         services.ConfigureFunctionsApplicationInsights();
         var configuration = context.Configuration;
         string connectionString = configuration.GetSection("ConnectionStrings:defaultConnection").Value!;
-        services.AddDbContext<librarydbContext>(options => options.UseSqlServer(connectionString, serverOptions =>
+        services.AddDbContext<LibrarydbContext>(options => options.UseSqlServer(connectionString, serverOptions =>
         {
             serverOptions.EnableRetryOnFailure();
         }));
         services.AddScoped<IStudent, StudentService>();
         services.AddScoped<ILibrarian, LibrarianService>();
+        services.AddScoped<IBook, BookCRUD>();
         services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
         services.AddCors(options => options.AddPolicy("AllowAny", policy => policy.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader()));
     })

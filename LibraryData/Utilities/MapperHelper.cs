@@ -18,6 +18,10 @@ namespace LibraryData.Utilities
 
             CreateMap<AddNewStudent, Student>()
                 .ForMember(dest => dest.Id, opt => opt.Ignore());
+
+            CreateMap<BookDetail, BookIssue>()
+                .ForMember(dest => dest.Id, opt => opt.Ignore())
+                .ForMember(dest => dest.IssueDate, opt => opt.Ignore());
         }
     }
 }

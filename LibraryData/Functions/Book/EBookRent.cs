@@ -9,28 +9,28 @@ using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
 using System.Net;
 
-namespace LibraryData.Functions.BorrowBooks
+namespace LibraryData.Functions.Book
 {
-    public class ReturnBook
+    public class EBookRent
     {
-        private readonly ILogger<ReturnBook> _logger;
-        private readonly IBook _book;
-        public ReturnBook(ILogger<ReturnBook> logger, IBook book)
+        private readonly ILogger<EBookRent> _logger;
+        private readonly IStudent _student;
+        public EBookRent(ILogger<EBookRent> logger, IStudent student)
         {
             _logger = logger;
-            _book = book;
+            _student = student;
         }
 
-        [OpenApiOperation(operationId: "ReturnBook", tags: new[] {""}, Visibility = OpenApiVisibilityType.Important)]
+        [OpenApiOperation(operationId: "EBookRent", tags: new[] { "" }, Visibility = OpenApiVisibilityType.Important)]
         [OpenApiParameter(name: "Bookname", In = ParameterLocation.Query, Required = true, Visibility = OpenApiVisibilityType.Important)]
         [OpenApiResponseWithBody(statusCode: HttpStatusCode.OK, contentType: "text/plain", bodyType: typeof(string))]
         [OpenApiResponseWithBody(statusCode: HttpStatusCode.BadRequest, contentType: "text/plain", bodyType: typeof(string))]
-        [Function("ReturnBook")]
-        public async Task<HttpResponseData> ReturnTheBook([HttpTrigger(AuthorizationLevel.Anonymous, "post")] HttpRequestData req)
+        [Function("EBookRent")]
+        public async Task<HttpResponseData> EBookRenting([HttpTrigger(AuthorizationLevel.Anonymous, "post")] HttpRequestData req)
         {
             _logger.LogInformation("C# HTTP trigger function processed a request.");
-            var response = await _book.ReturnABook(req.Query["Bookname"]!);
-            if(response.Item2)
+            var response = await _student.RentEBook(req.Query["Bookname"]!);
+            if (response.Item2)
             {
                 return req.CreateResponse(HttpStatusCode.OK);
             }

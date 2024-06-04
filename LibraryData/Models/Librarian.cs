@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations.Schema;
 
 namespace LibraryData.Models;
 
@@ -20,5 +19,5 @@ public partial class Librarian
 
     public string Phone { get; set; } = null!;
 
-    public DateTime DateOfJoining { get; set; } =DateTime.Now;
+    public DateTime DateOfJoining { get; set; }
 }

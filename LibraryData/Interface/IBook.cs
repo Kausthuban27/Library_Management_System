@@ -10,8 +10,10 @@ namespace LibraryData.Interface
 {
     public interface IBook
     {
-        Task<List<BookDetail>> SearchBook(SearchBooks searchBooks);
+        Task<List<BookDetail>> SearchTheBook(SearchBooks searchBooks);
         Task<(HttpStatusCode, bool)> AddBook(BookDetail book);
+        Task<List<BookIssue>> IssueABook(string bookname);
+        Task<(HttpStatusCode, bool)> ReturnABook(string bookname);
         void SaveChanges();
     }
 }

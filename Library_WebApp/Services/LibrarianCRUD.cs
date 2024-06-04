@@ -1,4 +1,5 @@
 ﻿using Library_WebApp.Model;
+using LibraryData.Models;
 using System.Net;
 using System.Text;
 using System.Text.Json;
@@ -20,7 +21,7 @@ namespace Library_WebApp.Services
             throw new NotImplementedException();
         }
 
-        public Task CheckAvailability(Uri BaseUrl, SearchBook search)
+        public Task CheckAvailability(Uri BaseUrl, SearchBooks search)
         {
             throw new NotImplementedException();
         }

@@ -17,9 +17,9 @@ namespace LibraryData.Services
 {
     public class StudentService : IStudent
     {
-        private readonly librarydbContext _libraryContext;
+        private readonly LibrarydbContext _libraryContext;
         private readonly ILogger<StudentService> _logger;
-        public StudentService(librarydbContext context, ILogger<StudentService> logger) 
+        public StudentService(LibrarydbContext context, ILogger<StudentService> logger) 
         {
             _libraryContext = context;
             _logger = logger;
@@ -71,6 +71,30 @@ namespace LibraryData.Services
             {
                 _logger.LogError(ex, "GetStudent: An unexpected error occurred.");
                 return new StatusCodeResult(500);
+            }
+        }
+
+        public async Task<(HttpStatusCode, bool)> RentEBook(string bookname)
+        {
+            try
+            {
+                decimal RentAmount = 500;
+                var bookAvailable = await _libraryContext.BookDetails.Where(b => b.Bookname == bookname).FirstOrDefaultAsync();
+                if (bookAvailable != null)
+                {
+                    _libraryContext.EbookRents.Add(new EbookRent { Bookname = bookname, IsRented = true, Category = bookAvailable.Category, RentAmount = RentAmount });
+                    SaveChanges();
+                    return (HttpStatusCode.OK, true);
+                }
+                else
+                {
+                    return (HttpStatusCode.BadRequest, false);
+                }
+            }
+            catch (Exception ex) 
+            {
+                _logger.LogError($"Exception occured {ex}");
+                return (HttpStatusCode.InternalServerError, false);
             }
         }
 

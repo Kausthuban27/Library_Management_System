@@ -1,6 +1,7 @@
 ﻿using LibraryData.Exceptions;
 using LibraryData.Interface;
 using LibraryData.Models;
+using LibraryData.Utilities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using System;
@@ -14,9 +15,9 @@ namespace LibraryData.Services.BookServices
 {
     public class BookCRUD : IBook
     {
-        private readonly librarydbContext _library;
+        private readonly LibrarydbContext _library;
         private readonly ILogger<BookCRUD> _logger;
-        public BookCRUD(librarydbContext librarydbContext, ILogger<BookCRUD> logger) 
+        public BookCRUD(LibrarydbContext librarydbContext, ILogger<BookCRUD> logger) 
         {
             _library = librarydbContext;
             _logger = logger;
@@ -43,21 +44,98 @@ namespace LibraryData.Services.BookServices
                 return (HttpStatusCode.InternalServerError, false);
             }
         }
-        public async Task<List<BookDetail>> SearchBook(SearchBooks searchBooks)
+        public async Task<List<BookDetail>> SearchTheBook(SearchBooks searchBooks)
         {
             try
             {
                 var books = _library.BookDetails.AsQueryable();
-                books = books.Where(b => (string.IsNullOrEmpty(searchBooks.bookName) || b.Bookname.Equals(searchBooks.bookName, StringComparison.OrdinalIgnoreCase)) && 
-                                                        (string.IsNullOrEmpty(searchBooks.authorName) || b.BookAuthor.Equals(searchBooks.authorName, StringComparison.OrdinalIgnoreCase)) &&
-                                                        (string.IsNullOrEmpty(searchBooks.publisherName) || b.BookPublisher.Equals(searchBooks.publisherName, StringComparison.OrdinalIgnoreCase)) &&
-                                                        (string.IsNullOrEmpty(searchBooks.categoryName) || b.Category.Equals(searchBooks.categoryName, StringComparison.OrdinalIgnoreCase)));
-                return await books.ToListAsync();
+                if(!string.IsNullOrEmpty(searchBooks.bookName))
+                {
+                    books = books.Where(b => b.Bookname.Equals(searchBooks.bookName));
+                }
+                if(!string.IsNullOrEmpty(searchBooks.authorName))
+                {
+                    books = books.Where(b => b.BookAuthor.Equals(searchBooks.authorName));
+                }
+                if(!string.IsNullOrEmpty(searchBooks.publisherName))
+                {
+                    books = books.Where(b => b.BookPublisher.Equals(searchBooks.publisherName));
+                }
+                if(!string.IsNullOrEmpty(searchBooks.categoryName))
+                {
+                    books = books.Where(b => b.Category.Equals(searchBooks.categoryName));
+                }
+
+                Console.WriteLine(books.ToString());
+                if (books.Any())
+                {
+                    _library.SearchHistories.Add(new SearchHistory { BookName = searchBooks.bookName, BookAuthor = searchBooks.authorName, BookPublisher = searchBooks.publisherName, Category = searchBooks.categoryName});
+                    SaveChanges();
+                    return await books.ToListAsync();
+                }
+                else
+                {
+                    return new List<BookDetail> { };
+                }
             }
             catch(Exception ex)
             {
                 _logger.LogError($"The following Exception occured {ex}");
                 return new List<BookDetail> { };
+            }
+        }
+        public async Task<List<BookIssue>> IssueABook(string bookname)
+        {
+            try
+            {
+                var book = await _library.BookDetails.Where(b => b.Bookname == bookname).FirstOrDefaultAsync();
+                if (book != null)
+                {
+                    var issuedBook = LibrarianMapper.MapBookIssued<BookIssue>(book);
+                    _library.BookIssues.Add(issuedBook);
+                    SaveChanges();
+                    return new List<BookIssue> { issuedBook };
+                }
+                else
+                {
+                    return new List<BookIssue> { };
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Following exception occcured {ex} ");
+                return new List<BookIssue> { };
+            }
+        }
+        public async Task<(HttpStatusCode, bool)> ReturnABook(string bookname)
+        {
+            try
+            {
+                var issuedBook = await _library.BookIssues.Where(b => b.Bookname == bookname).FirstOrDefaultAsync();
+                decimal fineAmount = 0;
+                bool fineApplicable = false;
+                if (issuedBook != null)
+                {
+                    var difference = issuedBook.IssueDate - DateTime.Now;
+                    var exceededDayes = difference.Days;
+                    if(exceededDayes > 0)
+                    {
+                        fineAmount = exceededDayes * 100;
+                        fineApplicable = true;       
+                    }
+                    _library.ReturnBooks.Add(new ReturnBook { Bookname = bookname, FineAmount = fineAmount, IsFineApplicable = fineApplicable});
+                    SaveChanges();
+                    return (HttpStatusCode.OK, true);
+                }
+                else
+                {
+                    return (HttpStatusCode.BadRequest, false);
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"{ex.Message}", ex);
+                return(HttpStatusCode.InternalServerError, false);
             }
         }
         public void SaveChanges()

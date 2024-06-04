@@ -16,5 +16,15 @@ namespace LibraryData.Utilities
             var requestData = JsonConvert.DeserializeObject<T>(requestContent);
             return requestData!;
         }
+
+        public static async Task<SearchBooks> SerializeRequest(HttpRequestData request)
+        {
+            var bookname = request.Query["Bookname"];
+            var authorname = request.Query["Authorname"];
+            var publishername = request.Query["Publishername"];
+            var cateogryname = request.Query["Categoryname"];
+
+            return new SearchBooks { bookName = bookname, authorName = authorname, publisherName = publishername, categoryName = cateogryname };
+        }
     }
 }
