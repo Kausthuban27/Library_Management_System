@@ -44,5 +44,13 @@ namespace LibraryData.Utilities
             }
             return _mapper.Map<T>(book);
         }
+        public static T MapNewBook<T>(LibrarianAddBook book)
+        {
+            if (_mapper == null)
+            {
+                throw new InvalidOperationException("Mapper is not initialized. Call Initialize method first");
+            }
+            return _mapper.Map<T>(book);
+        }
     }
 }

@@ -2,7 +2,7 @@
 
 namespace Library_WebApp.Model
 {
-    public class AddNewStudent
+    public class AddNewStudents
     {
         [StringLength(50, ErrorMessage = "Firstname cannot be more than 50")]
         [Required(ErrorMessage = "Firstname is Mandatory")]

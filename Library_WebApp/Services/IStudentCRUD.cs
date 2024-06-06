@@ -8,7 +8,7 @@ namespace Library_WebApp.Services
     {
         public Task<(HttpStatusCode, bool)> GetStudent(Uri BaseUrl, string username, string password);
         public Task<(HttpStatusCode, bool)> AddStudent<T>(Uri BaseUrl, T entity) where T : class;
-        public Task<T> Rentbook<T>(Uri BaseUrl, T entity) where T : class;
-        public Task<T> searchBook<T>(Uri BaseUrl, SearchBooks search);
+        public Task<(HttpStatusCode, bool)> Rentbook(Uri BaseUrl, string bookname);
+        public Task<List<BookDetail>> searchBook(Uri BaseUrl, string bookname, string authorname, string publishername, string categoryname);
     }
 }

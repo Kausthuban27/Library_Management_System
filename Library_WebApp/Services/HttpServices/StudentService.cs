@@ -1,5 +1,6 @@
 ﻿using Library_WebApp.Model;
 using LibraryData;
+using LibraryData.Models;
 using Microsoft.Extensions.Options;
 using System.Net;
 
@@ -9,7 +10,7 @@ namespace Library_WebApp.Services.HttpServices
     {
         private readonly LibraryDataConfiguration _libraryconfig;
         private readonly IStudentCRUD _studentCRUD;
-        private readonly Uri _registerUrl, _loginUrl;
+        private readonly Uri _registerUrl, _loginUrl, _rentUrl;
         public StudentService(IOptions<LibraryDataConfiguration> libraryOptions, IStudentCRUD studentCRUD)
         {
             _libraryconfig = libraryOptions.Value;
@@ -21,6 +22,7 @@ namespace Library_WebApp.Services.HttpServices
             var BaseUrl = new Uri(_libraryconfig.baseUrl, UriKind.Absolute);
             _registerUrl = new (BaseUrl, RouteConstants.Registerstudent) ;
             _loginUrl = new(BaseUrl, RouteConstants.Loginstudent);
+            _rentUrl = new(BaseUrl, RouteConstants.RentBook);
         }
 
         public async Task<(HttpStatusCode, bool)> AddNewStudent<T>(T entity) where T : class
@@ -31,6 +33,16 @@ namespace Library_WebApp.Services.HttpServices
         public async Task<(HttpStatusCode, bool)> GetExistingStudent(string username, string password)
         {
             return await _studentCRUD.GetStudent(_loginUrl, username, password);
+        }
+
+        public async Task<(HttpStatusCode, bool)> Rentbook(string bookname)
+        {
+            return await _studentCRUD.Rentbook(_rentUrl, bookname);
+        }
+
+        public Task<List<BookDetail>> searchBook(Uri BaseUrl, string bookname, string authorname, string publishername, string categoryname)
+        {
+            throw new NotImplementedException();
         }
     }
 }

@@ -1,5 +1,21 @@
-﻿<h3>RentBook</h3>
+﻿@inject IStudentService _student
+<h3>RentBook</h3>
+<form @onsubmit="RentTheBook">
+    <input type="text" placeholder="Enter the name of book" required @bind-value=bookname/>
+    <button type="submit" class="btn btn-primary"></button>
+</form>
 
-@code {
-
+@message
+@code 
+{
+    public string bookname { get; set; } = null!;
+    public string message { get; set; } = null!;
+    private async void RentTheBook()
+    {
+        var response = await _student.Rentbook(bookname);
+        if(response.Item2)
+        {
+            message = "Successfully Rented";
+        }
+    }
 }

@@ -23,7 +23,7 @@ namespace LibraryData.Functions.Book
         }
 
         [OpenApiOperation(operationId: "AddBook", tags: new[] { "" }, Visibility = OpenApiVisibilityType.Important)]
-        [OpenApiRequestBody(contentType: "application/json", bodyType: typeof(BookDetail), Required = true)]
+        [OpenApiRequestBody(contentType: "application/json", bodyType: typeof(LibrarianAddBook), Required = true)]
         [OpenApiResponseWithBody(statusCode: HttpStatusCode.OK, contentType: "text/plain", bodyType: typeof(string))]
         [OpenApiResponseWithBody(statusCode: HttpStatusCode.BadRequest, contentType: "text/plain", bodyType: typeof(string))]
         [Function("AddBook")]
@@ -32,7 +32,7 @@ namespace LibraryData.Functions.Book
             _logger.LogInformation("C# HTTP trigger function processed a request.");
             try
             {
-                var request = await JsonHelper.DesrializeRequest<BookDetail>(req);
+                var request = await JsonHelper.DesrializeRequest<LibrarianAddBook>(req);
                 if (request == null)
                 {
                     throw new ArgumentNullException(nameof(req));

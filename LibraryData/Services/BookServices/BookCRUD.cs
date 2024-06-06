@@ -22,7 +22,7 @@ namespace LibraryData.Services.BookServices
             _library = librarydbContext;
             _logger = logger;
         } 
-        public async Task<(HttpStatusCode, bool)> AddBook(BookDetail book)
+        public async Task<(HttpStatusCode, bool)> AddBook(LibrarianAddBook book)
         {
             try
             {
@@ -33,7 +33,8 @@ namespace LibraryData.Services.BookServices
                 }
                 else
                 {
-                    _library.Add(book);
+                    var newBook = LibrarianMapper.MapNewBook<BookDetail>(book);
+                    _library.BookDetails.Add(newBook);
                     SaveChanges();
                     return (HttpStatusCode.OK, true);
                 }
@@ -140,7 +141,7 @@ namespace LibraryData.Services.BookServices
         }
         public void SaveChanges()
         {
-            _library.SaveChangesAsync(); 
+            _library.SaveChanges(); 
         }
     }
 }

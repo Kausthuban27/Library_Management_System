@@ -2,7 +2,7 @@
 
 namespace Library_WebApp.Model
 {
-    public class Librarian
+    public class Librarians
     {
         [StringLength(20, ErrorMessage = "Firstname cannot be more than 100")]
         [Required(ErrorMessage = "Firstname is Mandatory")]

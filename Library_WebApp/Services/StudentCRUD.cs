@@ -53,14 +53,37 @@ namespace Library_WebApp.Services
             return (HttpStatusCode.BadRequest, false);
         }
 
-        public Task<T> Rentbook<T>(Uri BaseUrl, T entity) where T : class
+        public async Task<(HttpStatusCode, bool)> Rentbook(Uri BaseUrl, string bookname)
         {
-            throw new NotImplementedException();
+            UriBuilder uriBuilder = new UriBuilder(BaseUrl);
+            var query = HttpUtility.ParseQueryString(uriBuilder.Query);
+            query["Bookname"] = bookname;
+            uriBuilder.Query = query.ToString();
+            HttpResponseMessage response = await _httpClient.GetAsync(uriBuilder.Uri);
+            if (response.IsSuccessStatusCode)
+            {
+                return (HttpStatusCode.OK, true);
+            }
+            return (HttpStatusCode.BadRequest, false);
         }
 
-        public Task<T> searchBook<T>(Uri BaseUrl, SearchBooks search)
+        public async Task<List<BookDetail>> searchBook(Uri BaseUrl, string bookname, string authorname, string publishername, string categoryname)
         {
-            throw new NotImplementedException();
+            UriBuilder uriBuilder = new UriBuilder(BaseUrl);
+            var query = HttpUtility.ParseQueryString(uriBuilder.Query);
+            query["Bookname"] = bookname;
+            query["Authorname"] = authorname;
+            query["Publishername"] = publishername;
+            query["Categoryname"] = categoryname;
+            uriBuilder.Query = query.ToString();
+            HttpResponseMessage response = await _httpClient.GetAsync(uriBuilder.Uri);
+            if (response.IsSuccessStatusCode)
+            {
+                string jsonResponse = await response.Content.ReadAsStringAsync();
+                var bookDetails = Newtonsoft.Json.JsonConvert.DeserializeObject<List<BookDetail>>(jsonResponse);
+                return bookDetails!;
+            }
+            return new List<BookDetail> { };
         }
     }
 }
