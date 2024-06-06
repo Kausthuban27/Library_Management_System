@@ -74,11 +74,15 @@ public partial class LibrarydbContext : DbContext
 
             entity.ToTable("EBookRent");
 
-            entity.Property(e => e.Bookname)
-                .HasMaxLength(10)
-                .IsFixedLength();
+            entity.Property(e => e.Bookname).HasMaxLength(100);
             entity.Property(e => e.Category).HasMaxLength(100);
             entity.Property(e => e.RentAmount).HasColumnType("decimal(5, 0)");
+            entity.Property(e => e.Username).HasMaxLength(20);
+
+            entity.HasOne(d => d.UsernameNavigation).WithMany(p => p.EbookRents)
+                .HasForeignKey(d => d.Username)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("Fk_Username");
         });
 
         modelBuilder.Entity<Librarian>(entity =>
@@ -108,15 +112,15 @@ public partial class LibrarydbContext : DbContext
 
         modelBuilder.Entity<SearchHistory>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__SearchHi__3214EC0761090966");
+            entity
+                .HasNoKey()
+                .ToTable("SearchHistory");
 
-            entity.ToTable("SearchHistory");
-
-            entity.Property(e => e.Id).ValueGeneratedNever();
             entity.Property(e => e.BookAuthor).HasMaxLength(100);
             entity.Property(e => e.BookName).HasMaxLength(100);
             entity.Property(e => e.BookPublisher).HasMaxLength(100);
             entity.Property(e => e.Category).HasMaxLength(100);
+            entity.Property(e => e.Id).ValueGeneratedOnAdd();
         });
 
         modelBuilder.Entity<Student>(entity =>

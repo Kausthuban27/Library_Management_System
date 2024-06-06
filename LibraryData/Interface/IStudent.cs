@@ -15,7 +15,8 @@ namespace LibraryData.Interface
     {
         Task<IActionResult> GetStudent(string username, string password);
         Task<(HttpStatusCode, bool)> AddStudent(AddNewStudent student);
-        Task<(HttpStatusCode, bool)> RentEBook(string bookname);
+        Task<(HttpStatusCode, bool)> RentEBook(string bookname, string username);
+        Task<IEnumerable<EbookRent>> RentedBooks(string username);
         void SaveChanges();
     }
 }

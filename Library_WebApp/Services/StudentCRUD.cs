@@ -1,6 +1,7 @@
 ﻿using Library_WebApp.Model;
 using LibraryData.Models;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
 using System.Net;
 using System.Text;
 using System.Text.Json;
@@ -38,6 +39,22 @@ namespace Library_WebApp.Services
             return (HttpStatusCode.BadRequest, false);
         }
 
+        public async Task<IActionResult> ebookRents(Uri BaseUrl, string username)
+        {
+            UriBuilder uriBuilder = new UriBuilder(BaseUrl);
+            var query = HttpUtility.ParseQueryString(uriBuilder.Query);
+            query["username"] = username;
+            uriBuilder.Query = query.ToString();
+            HttpResponseMessage response = await _httpClient.GetAsync(uriBuilder.Uri);
+            Console.WriteLine(response);
+            Console.WriteLine(response.Content);
+            if(response.IsSuccessStatusCode)
+            {
+                return new OkObjectResult(response.Content);
+            }
+            return new BadRequestObjectResult("Bad Request by User");
+        }
+
         public async Task<(HttpStatusCode, bool)> GetStudent(Uri BaseUrl, string username, string password)
         {
             UriBuilder uriBuilder = new UriBuilder(BaseUrl);
@@ -53,13 +70,15 @@ namespace Library_WebApp.Services
             return (HttpStatusCode.BadRequest, false);
         }
 
-        public async Task<(HttpStatusCode, bool)> Rentbook(Uri BaseUrl, string bookname)
+        public async Task<(HttpStatusCode, bool)> Rentbook(Uri BaseUrl, string bookname, string username)
         {
             UriBuilder uriBuilder = new UriBuilder(BaseUrl);
             var query = HttpUtility.ParseQueryString(uriBuilder.Query);
             query["Bookname"] = bookname;
+            query["Username"] = username;
             uriBuilder.Query = query.ToString();
-            HttpResponseMessage response = await _httpClient.GetAsync(uriBuilder.Uri);
+            var content = new StringContent(string.Empty);
+            HttpResponseMessage response = await _httpClient.PostAsync(uriBuilder.Uri, content);
             if (response.IsSuccessStatusCode)
             {
                 return (HttpStatusCode.OK, true);
@@ -67,7 +86,7 @@ namespace Library_WebApp.Services
             return (HttpStatusCode.BadRequest, false);
         }
 
-        public async Task<List<BookDetail>> searchBook(Uri BaseUrl, string bookname, string authorname, string publishername, string categoryname)
+        public async Task<List<BookDetail>> searchBook(Uri BaseUrl, string? bookname, string? authorname, string? publishername, string? categoryname)
         {
             UriBuilder uriBuilder = new UriBuilder(BaseUrl);
             var query = HttpUtility.ParseQueryString(uriBuilder.Query);

@@ -10,5 +10,7 @@ namespace LibraryData
         public const string LoginLibrarian = "GetLibrarian";
         public const string RentBook = "EBookRent";
         public const string SearchBook = "SearchBook";
+        public const string AddBook = "AddBook";
+        public const string RentedBooks = "ShowRentedBooks";
     }
 }

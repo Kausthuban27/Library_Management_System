@@ -6,5 +6,6 @@ namespace Library_WebApp.Services.HttpServices
     {
         public Task<(HttpStatusCode, bool)> GetExistingLibrarian(string username, string password);
         public Task<(HttpStatusCode, bool)> AddNewLibrarian<T>(T entity) where T : class;
+        public Task<(HttpStatusCode, bool)> AddNewBook<T>(T entity) where T : class;
     }
 }

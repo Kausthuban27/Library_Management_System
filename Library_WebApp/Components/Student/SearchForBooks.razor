@@ -1,5 +1,83 @@
-﻿<h3>SearchBook</h3>
+﻿@inject IStudentService _studentService
+<div class="container-fluid w-75">
+    <h3 class="text-center mb-5 fs-2">@msg</h3>
+    <div class="d-flex flex-row flex-grow-1 justify-content-center">
+        <div class="col-lg-5 col-md-5 justify-content-center align-self-center">
+            <EditForm FornName="SearchBook" class="form-group container-fluid text-center" Model="searchBooks" OnSubmit="SeachForBook">
+                <div class="mb-3">
+                    <h3>Search For Book</h3>
+                </div>
+                <div class="mb-3">
+                    <InputText type="text" placeholder="Enter the Book name" class="form-control" @bind-Value="searchBooks.bookName" />
+                </div>
+                <div class="mb-3">
+                    <InputText type="text" placeholder="Enter the Author name" class="form-control" @bind-Value="searchBooks.authorName" />
+                </div>
+                <div class="mb-3">
+                    <InputText type="text" placeholder="Enter Book Publisher name" class="form-control" @bind-Value="searchBooks.publisherName" />
+                </div>
+                <div class="mb-3">
+                    <InputText type="text" placeholder="Enter Category name" class="form-control" @bind-Value="searchBooks.categoryName" />
+                </div>
+                <button class="btn btn-primary" type="submit">Submit</button>
+            </EditForm>
+        </div>
+        <div class="col-lg-5 col-md-4">
+            <img src="Images/Student-im.png" height="500" />
+        </div>
+    </div>
+</div>
 
-@code {
+@if (bookDetails.Any())
+{
+    <BSDataTable Items="bookDetails" Context="item" PaginationBottom="true" StartPage="1" RowsPerPage="5">
+    <Header>
+        <BSDataTableHead Color="BSColor.Dark" TValue="BookDetail" Sortable="true" Column="@(nameof(BookDetail.Id))">BookId</BSDataTableHead>
+        <BSDataTableHead Color="BSColor.Dark" TValue="BookDetail" Sortable="true" Column="@(nameof(BookDetail.Bookname))">Bookname</BSDataTableHead>
+        <BSDataTableHead Color="BSColor.Dark" TValue="BookDetail" Sortable="true" Column="@(nameof(BookDetail.BookAuthor))">BookAuthor</BSDataTableHead>
+        <BSDataTableHead Color="BSColor.Dark" TValue="BookDetail" Sortable="true" Column="@(nameof(BookDetail.BookPublisher))">BookPublisher</BSDataTableHead>
+        <BSDataTableHead Color="BSColor.Dark" TValue="BookDetail" Sortable="true" Column="@(nameof(BookDetail.Category))">Category</BSDataTableHead>
+    </Header>
+    <Body>
+        <BSDataTableRow>
+            <BSTD>
+                @item.Id
+            </BSTD>
+            <BSTD>
+                @item.Bookname
+            </BSTD>
+            <BSTD>
+                @item.BookAuthor
+            </BSTD>
+            <BSTD>
+                @item.BookPublisher
+            </BSTD>
+            <BSTD>
+                @item.Category
+            </BSTD>
+        </BSDataTableRow>
+    </Body>
+    </BSDataTable>
+}
+@code 
+{
+    public SearchBooks searchBooks { get; set; } = new();
+    public IEnumerable<BookDetail>? booksList => bookDetails;
+    public List<BookDetail> bookDetails { get; set; } = new();
+    public string msg = "";
 
+    private async Task<List<BookDetail>> SeachForBook()
+    {
+        var response = await _studentService.searchBook(searchBooks.bookName, searchBooks.authorName, searchBooks.publisherName, searchBooks.categoryName);
+        if(response.Any())
+        {
+            bookDetails.AddRange(response);
+            searchBooks = new();
+            return response;
+        }
+        else
+        {
+            return new List<BookDetail>() { };
+        }
+    }
 }

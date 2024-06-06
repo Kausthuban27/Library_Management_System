@@ -16,9 +16,22 @@ namespace Library_WebApp.Services
             _httpClient = httpClientFactory.CreateClient("baseUrl");
             _logger = logger;
         }
-        public Task<T> AddBook<T>(Uri BaseUrl, T entity) where T : class
+        public async Task<(HttpStatusCode, bool)> AddBook<T>(Uri BaseUrl, T entity) where T : class
         {
-            throw new NotImplementedException();
+            string json = JsonSerializer.Serialize(entity);
+
+            var request = new HttpRequestMessage
+            {
+                Method = HttpMethod.Post,
+                RequestUri = BaseUrl,
+                Content = new StringContent(json, Encoding.UTF8, "application/json")
+            };
+            HttpResponseMessage response = await _httpClient.SendAsync(request);
+            if (response.IsSuccessStatusCode)
+            {
+                return (HttpStatusCode.OK, true);
+            }
+            return (HttpStatusCode.BadRequest, false);
         }
 
         public Task CheckAvailability(Uri BaseUrl, SearchBooks search)
@@ -40,7 +53,6 @@ namespace Library_WebApp.Services
         {
             string json = JsonSerializer.Serialize(entity);
 
-            Console.WriteLine(json);
             var request = new HttpRequestMessage
             {
                 Method = HttpMethod.Post,
@@ -48,13 +60,11 @@ namespace Library_WebApp.Services
                 Content = new StringContent(json, Encoding.UTF8, "application/json")
             };
 
-            Console.WriteLine(request);
             HttpResponseMessage response = await _httpClient.SendAsync(request);
             if (response.IsSuccessStatusCode)
             {
                 return (HttpStatusCode.OK, true);
             }
-            Console.WriteLine(response);
             return (HttpStatusCode.BadRequest, false);
         }
 

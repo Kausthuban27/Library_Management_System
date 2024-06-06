@@ -74,7 +74,7 @@ namespace LibraryData.Services
             }
         }
 
-        public async Task<(HttpStatusCode, bool)> RentEBook(string bookname)
+        public async Task<(HttpStatusCode, bool)> RentEBook(string bookname, string username)
         {
             try
             {
@@ -82,7 +82,7 @@ namespace LibraryData.Services
                 var bookAvailable = await _libraryContext.BookDetails.Where(b => b.Bookname == bookname).FirstOrDefaultAsync();
                 if (bookAvailable != null)
                 {
-                    _libraryContext.EbookRents.Add(new EbookRent { Bookname = bookname, IsRented = true, Category = bookAvailable.Category, RentAmount = RentAmount });
+                    _libraryContext.EbookRents.Add(new EbookRent { Bookname = bookname, IsRented = true, Category = bookAvailable.Category, RentAmount = RentAmount, Username = username });
                     SaveChanges();
                     return (HttpStatusCode.OK, true);
                 }
@@ -95,6 +95,28 @@ namespace LibraryData.Services
             {
                 _logger.LogError($"Exception occured {ex}");
                 return (HttpStatusCode.InternalServerError, false);
+            }
+        }
+
+        public async Task<IEnumerable<EbookRent>> RentedBooks(string username)
+        {
+            try
+            {
+                var validUser = await _libraryContext.Students.FirstOrDefaultAsync(b => b.Username == username);
+                if(validUser != null)
+                {
+                    var rentedBooks = await _libraryContext.EbookRents.Where(b => b.Username == username && b.IsRented).ToListAsync();
+                    return rentedBooks;
+                }
+                else
+                {
+                    throw new Exception("User Is Invalid");
+                }
+            }
+            catch(Exception ex)
+            {
+                _logger.LogError($"An Exception Occurred : {ex} ");
+                return Enumerable.Empty<EbookRent>();
             }
         }
 

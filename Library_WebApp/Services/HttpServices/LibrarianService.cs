@@ -9,7 +9,7 @@ namespace Library_WebApp.Services.HttpServices
     {
         private readonly LibraryDataConfiguration _libraryconfig;
         private readonly ILibrarianCRUD _librarianCRUD;
-        private readonly Uri _registerUrl, _loginUrl;
+        private readonly Uri _registerUrl, _loginUrl, _newBookUrl;
         public LibrarianService(IOptions<LibraryDataConfiguration> libraryOptions, ILibrarianCRUD librarianCRUD)
         {
             _libraryconfig = libraryOptions.Value;
@@ -21,7 +21,14 @@ namespace Library_WebApp.Services.HttpServices
             var BaseUrl = new Uri(_libraryconfig.baseUrl, UriKind.Absolute);
             _registerUrl = new(BaseUrl, RouteConstants.RegisterLibrarian);
             _loginUrl = new(BaseUrl, RouteConstants.LoginLibrarian);
+            _newBookUrl = new(BaseUrl, RouteConstants.AddBook);
         }
+
+        public async Task<(HttpStatusCode, bool)> AddNewBook<T>(T entity) where T : class
+        {
+            return await _librarianCRUD.AddBook(_newBookUrl, entity);
+        }
+
         public async Task<(HttpStatusCode, bool)> AddNewLibrarian<T>(T entity) where T : class
         {
             return await _librarianCRUD.AddLibrarian(_registerUrl, entity);

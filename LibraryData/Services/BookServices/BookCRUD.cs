@@ -67,7 +67,6 @@ namespace LibraryData.Services.BookServices
                     books = books.Where(b => b.Category.Equals(searchBooks.categoryName));
                 }
 
-                Console.WriteLine(books.ToString());
                 if (books.Any())
                 {
                     _library.SearchHistories.Add(new SearchHistory { BookName = searchBooks.bookName, BookAuthor = searchBooks.authorName, BookPublisher = searchBooks.publisherName, Category = searchBooks.categoryName});

@@ -23,13 +23,14 @@ namespace LibraryData.Functions.Book
 
         [OpenApiOperation(operationId: "EBookRent", tags: new[] { "" }, Visibility = OpenApiVisibilityType.Important)]
         [OpenApiParameter(name: "Bookname", In = ParameterLocation.Query, Required = true, Visibility = OpenApiVisibilityType.Important)]
+        [OpenApiParameter(name: "Username", In = ParameterLocation.Query, Required = true, Visibility = OpenApiVisibilityType.Important)]
         [OpenApiResponseWithBody(statusCode: HttpStatusCode.OK, contentType: "text/plain", bodyType: typeof(string))]
         [OpenApiResponseWithBody(statusCode: HttpStatusCode.BadRequest, contentType: "text/plain", bodyType: typeof(string))]
         [Function("EBookRent")]
         public async Task<HttpResponseData> EBookRenting([HttpTrigger(AuthorizationLevel.Anonymous, "post")] HttpRequestData req)
         {
             _logger.LogInformation("C# HTTP trigger function processed a request.");
-            var response = await _student.RentEBook(req.Query["Bookname"]!);
+            var response = await _student.RentEBook(req.Query["Bookname"]!, req.Query["Username"]!);
             if (response.Item2)
             {
                 return req.CreateResponse(HttpStatusCode.OK);

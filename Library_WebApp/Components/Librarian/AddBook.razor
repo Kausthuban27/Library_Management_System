@@ -1,25 +1,27 @@
-﻿ <div class="container-fluid w-75">
-     <h3 class="text-center mb-5 fs-2">Hello All</h3>
+﻿@inject ILibrarianService _librarianService
+
+<div class="container-fluid w-75">
+     <h3 class="text-center mb-5 fs-2">@msg</h3>
      <div class="d-flex flex-row flex-grow-1 justify-content-center">
          <div class="col-lg-5 col-md-5 justify-content-center align-self-center">
-             <form class="form-group container-fluid text-center">
+             <EditForm FornName="NewBook" class="form-group container-fluid text-center" Model="newBook" OnSubmit="addBook">
                  <div class="mb-3">
                      <h3>Add New Book</h3>
                  </div>
                  <div class="mb-3">
-                     <input type="text" placeholder="Enter Book name" class="form-control"/>
+                     <InputText type="text" placeholder="Enter the Book name" class="form-control" @bind-Value="newBook.Bookname" />
                  </div>
                  <div class="mb-3">
-                     <input type="text" placeholder="Enter Publisher name" class="form-control" />
+                    <InputText type="text" placeholder="Enter the Author name" class="form-control" @bind-Value="newBook.BookAuthor" />
                  </div>
                  <div class="mb-3">
-                     <input type="text" placeholder="Enter Book Author" class="form-control" />
+                    <InputText type="text" placeholder="Enter Book Publisher name" class="form-control" @bind-Value="newBook.BookPublisher" />
                  </div>
                  <div class="mb-3">
-                     <input type="text" placeholder="Enter Category name" class="form-control" />
+                    <InputText type="text" placeholder="Enter Category name" class="form-control" @bind-Value="newBook.Category" />
                  </div>
                  <button class="btn btn-primary" type="submit" >Submit</button>
-             </form>
+             </EditForm>
          </div>
          <div class="col-lg-5 col-md-4">
              <img src="Images/Librarian.jpg" height="500"/>
@@ -27,6 +29,23 @@
      </div>
  </div>
 
-@code {
+@code 
+{
+    public AddBookByLibrarian newBook { get; set; } = new();
+    public string msg = "";
 
+    private async Task addBook()
+    {
+        var response = await _librarianService.AddNewBook(newBook);
+        if(response.Item2)
+        {
+            msg = "Successfully Added";
+            newBook = new();
+            msg = string.Empty;
+        }
+        else
+        {
+            msg = "Invalid Details or Error Occured";
+        }
+    }
 }

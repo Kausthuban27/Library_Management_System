@@ -18,4 +18,6 @@ public partial class Student
     public string Department { get; set; } = null!;
 
     public int Year { get; set; }
+
+    public virtual ICollection<EbookRent> EbookRents { get; set; } = new List<EbookRent>();
 }

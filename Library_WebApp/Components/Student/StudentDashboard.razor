@@ -1,25 +1,49 @@
-﻿<h3 class="text-center fs-3">Your Dashboard</h3>
+﻿@using Microsoft.AspNetCore.Mvc
+@inject IStudentService _studentService
+@inject UserStateManagementService _userStateManagement
 
-<div>
-    <h3>Books Searched</h3>
-    <BSTable>
-            <BSTHead>
-                <BSTR>
-                    <BSTD>Id</BSTD>
-                    <BSTD>BookName</BSTD>
-                    <BSTD>BookAuthor</BSTD>
-                    <BSTD>BookPublisher</BSTD>
-                    <BSTD>BookCategory</BSTD>
-                </BSTR>
-            </BSTHead>
-    </BSTable>
-</div>
+<h3 class="text-center fs-3">Your Dashboard</h3>
 
-<div>
+@* <div>
     <h3>Books Rented</h3>
-</div>
+    <BSDataTable Items="EbookRents" PaginationBottom="true" StartPage="1" RowsPerPage="5" Context="item">
+        <Header>
+            <BSDataTableHead Color="BSColor.Dark" TValue="EbookRent" Sortable="true" Column="@(nameof(EbookRent.Id))">Book Id</BSDataTableHead>
+            <BSDataTableHead Color="BSColor.Dark" TValue="EbookRent" Sortable="true" Column="@(nameof(EbookRent.Bookname))">Book name</BSDataTableHead>
+            <BSDataTableHead Color="BSColor.Dark" TValue="EbookRent" Sortable="true" Column="@(nameof(EbookRent.Category))">Book Category</BSDataTableHead>
+            <BSDataTableHead Color="BSColor.Dark" TValue="EbookRent" Sortable="true" Column="@(nameof(EbookRent.RentAmount))">Amount Rented</BSDataTableHead>
+        </Header>
+        <Body>
+            <BSDataTableRow>
+                <BSTD>
+                    @item.Id
+                </BSTD>
+                <BSTD>
+                    @item.Bookname
+                </BSTD>
+                <BSTD>
+                    @item.Category
+                </BSTD>
+                <BSTD>
+                    @item.RentAmount
+                </BSTD>
+            </BSDataTableRow>
+        </Body>
+    </BSDataTable>
+</div>  *@
 
 @code 
 {
-    public List<SearchHistory>? SearchHistories { get; set; }
+    public IEnumerable<EbookRent>? rentedBooks = Enumerable.Empty<EbookRent>();
+
+    private async Task<IActionResult> EbookRents()
+    {
+        var response = await _studentService.ebookRents(_userStateManagement.username);
+        if (response != null)
+        {
+            return new OkObjectResult(response);
+        }
+        
+        return new BadRequestObjectResult("BadRequest");
+    }
 }

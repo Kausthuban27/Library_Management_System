@@ -1,9 +1,21 @@
 ﻿@inject IStudentService _student
-<h3>RentBook</h3>
-<form @onsubmit="RentTheBook">
-    <input type="text" placeholder="Enter the name of book" required @bind-value=bookname/>
-    <button type="submit" class="btn btn-primary"></button>
-</form>
+@inject UserStateManagementService _userStateService
+
+<h3 class="text-center">Rent a Book Here</h3>
+<div class="container d-flex justify-content-center align-items-center mt-5">
+    <div class="border rounded p-4 w-50">
+        <form class="form-group" @onsubmit = "RentTheBook">
+            <div class="mb-3">
+                <label for="Bookname" class="form-label fw-bold">Bookname:</label>
+                <InputText class="form-control" type="text" id="Bookname" @bind-Value = "bookname" placeholder="Enter the Username" />
+            </div>
+            <div class="mb-3 d-grid gap-2 d-md-flex justify-content-md-center">
+                <button class="btn btn-primary" type="submit">Submit</button>
+            </div>
+        </form>
+    </div>
+    <h5>@message</h5>
+</div>
 
 @message
 @code 
@@ -12,10 +24,15 @@
     public string message { get; set; } = null!;
     private async void RentTheBook()
     {
-        var response = await _student.Rentbook(bookname);
+        var response = await _student.Rentbook(bookname, _userStateService.username);
         if(response.Item2)
         {
             message = "Successfully Rented";
+            message = string.Empty;
+        }
+        else
+        {
+            message = "Error Occured";
         }
     }
 }
