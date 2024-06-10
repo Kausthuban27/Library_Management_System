@@ -1,0 +1,39 @@
+﻿@inject ILibrarianService _librarianService
+@inject UserStateManagementService _userStateManagement
+
+<h3 class="text-center">Rent a Book Here</h3>
+<div class="container d-flex justify-content-center align-items-center mt-5">
+    <div class="border rounded p-4 w-50">
+        <form class="form-group" @onsubmit="IssueTheBook">
+            <div class="mb-3">
+                <label for="Bookname" class="form-label fw-bold">Bookname:</label>
+                <InputText class="form-control" type="text" id="Bookname" @bind-Value="bookname" placeholder="Enter the Bookname" />
+            </div>
+            <div class="mb-3">
+                <label for="Username" class="form-label fw-bold">Username:</label>
+                <InputText class="form-control" type="text" id="Username" @bind-Value="username" placeholder="Enter the Username" />
+            </div>
+            <div class="mb-3 d-grid gap-2 d-md-flex justify-content-md-center">
+                <button class="btn btn-primary" type="submit">Submit</button>
+            </div>
+        </form>
+    </div>
+    <h5>@msg</h5>
+</div>
+
+@code 
+{
+    public string bookname { get; set; } = null!;
+    public string username { get; set; } = null!;
+    string msg = "";
+
+    private async void IssueTheBook()
+    {
+        var response = await _librarianService.IssueBook(bookname, username);
+        if(response.Item2)
+        {
+            msg += "Successfully Issued the Book";
+        }
+        msg += "Error Occurred";
+    }
+}

@@ -19,5 +19,7 @@ public partial class Student
 
     public int Year { get; set; }
 
+    public virtual ICollection<BookIssue> BookIssues { get; set; } = new List<BookIssue>();
+
     public virtual ICollection<EbookRent> EbookRents { get; set; } = new List<EbookRent>();
 }

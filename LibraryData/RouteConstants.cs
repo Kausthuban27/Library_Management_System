@@ -12,5 +12,9 @@ namespace LibraryData
         public const string SearchBook = "SearchBook";
         public const string AddBook = "AddBook";
         public const string RentedBooks = "ShowRentedBooks";
+        public const string IssueBook = "IssueBook";
+        public const string GetIssuedBooks = "GetIssuedBooks";
+        public const string AllIssuedBooks = "AllIssuedBooks";
+        public const string ReturnBook = "ReturnBook";
     }
 }

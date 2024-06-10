@@ -4,6 +4,7 @@
     [BookName] NVARCHAR(100) NULL, 
     [BookAuthor] NVARCHAR(100) NULL, 
     [BookPublisher] NVARCHAR(100) NULL,
-    [Category] NVARCHAR(100) NULL
+    [Category] NVARCHAR(100) NULL, 
+    CONSTRAINT [PK_SearchHistory] PRIMARY KEY ([Id])
 )
 

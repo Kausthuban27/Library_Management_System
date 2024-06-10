@@ -1,5 +1,45 @@
-﻿<h3>LibrarianDashboard</h3>
+﻿@inject ILibrarianService _librarianService
 
-@code {
+<h3 class="text-center">LibrarianDashboard</h3>
 
+<h3>Books Issued So Far</h3>
+<BSDataTable Items="allbooksIssued" Context="item">
+    <Header>
+        <BSDataTableHead Color="BSColor.Danger" TValue="BookIssue" Column="@(nameof(BookIssue.Id))">Book Id</BSDataTableHead>
+        <BSDataTableHead Color="BSColor.Danger" TValue="BookIssue" Column="@(nameof(BookIssue.Bookname))">Bookname</BSDataTableHead>
+        <BSDataTableHead Color="BSColor.Danger" TValue="BookIssue" Column="@(nameof(BookIssue.BookAuthor))">Bookauthor</BSDataTableHead>
+        <BSDataTableHead Color="BSColor.Danger" TValue="BookIssue" Column="@(nameof(BookIssue.BookPublisher))">Bookpublisher</BSDataTableHead>
+        <BSDataTableHead Color="BSColor.Danger" TValue="BookIssue" Column="@(nameof(BookIssue.Category))">Book Category</BSDataTableHead>
+        <BSDataTableHead Color="BSColor.Danger" TValue="BookIssue" Column="@(nameof(BookIssue.IssueDate))">Issued On</BSDataTableHead>
+        <BSDataTableHead Color="BSColor.Danger" TValue="BookIssue" Column="@(nameof(BookIssue.Username))">Issued To</BSDataTableHead>
+    </Header>
+    <Body>
+        <BSDataTableRow>
+            <BSTD>@item.Id</BSTD>
+            <BSTD>@item.Bookname</BSTD>
+            <BSTD>@item.BookAuthor</BSTD>
+            <BSTD>@item.BookPublisher</BSTD>
+            <BSTD>@item.Category</BSTD>
+            <BSTD>@item.IssueDate</BSTD>
+            <BSTD>@item.Username</BSTD>
+        </BSDataTableRow>
+    </Body>
+</BSDataTable>
+
+@code 
+{
+    public List<BookIssue> allbooksIssuedList { get; set; } = new();
+    public IEnumerable<BookIssue> allbooksIssued => allbooksIssuedList;
+
+    protected override async Task OnInitializedAsync()
+    {
+        await GetAllIssuedBooks();
+    }
+
+    private async Task<List<BookIssue>> GetAllIssuedBooks()
+    {
+        var response = await _librarianService.AllBooks();
+        allbooksIssuedList.AddRange(response);
+        return allbooksIssuedList;
+    }
 }

@@ -84,7 +84,7 @@ namespace LibraryData.Services.BookServices
                 return new List<BookDetail> { };
             }
         }
-        public async Task<List<BookIssue>> IssueABook(string bookname)
+        public async Task<(HttpStatusCode, bool)> IssueABook(string bookname, string username)
         {
             try
             {
@@ -92,26 +92,28 @@ namespace LibraryData.Services.BookServices
                 if (book != null)
                 {
                     var issuedBook = LibrarianMapper.MapBookIssued<BookIssue>(book);
+                    issuedBook.Username = username;
                     _library.BookIssues.Add(issuedBook);
                     SaveChanges();
-                    return new List<BookIssue> { issuedBook };
+                    return (HttpStatusCode.OK, true);
                 }
                 else
                 {
-                    return new List<BookIssue> { };
+                    return (HttpStatusCode.BadRequest, false);
                 }
             }
             catch (Exception ex)
             {
                 _logger.LogError($"Following exception occcured {ex} ");
-                return new List<BookIssue> { };
+                return (HttpStatusCode.InternalServerError, false);
             }
         }
-        public async Task<(HttpStatusCode, bool)> ReturnABook(string bookname)
+        public async Task<(HttpStatusCode, BookIssue)> ReturnABook(string bookname, string username)
         {
             try
             {
-                var issuedBook = await _library.BookIssues.Where(b => b.Bookname == bookname).FirstOrDefaultAsync();
+                var issuedBook = await _library.BookIssues.Where(b => b.Bookname == bookname && b.Username == username).FirstOrDefaultAsync();
+                var issueBook = await _library.BookIssues.FirstOrDefaultAsync(b => b.Bookname == bookname && b.Username == username);
                 decimal fineAmount = 0;
                 bool fineApplicable = false;
                 if (issuedBook != null)
@@ -123,24 +125,56 @@ namespace LibraryData.Services.BookServices
                         fineAmount = exceededDayes * 100;
                         fineApplicable = true;       
                     }
-                    _library.ReturnBooks.Add(new ReturnBook { Bookname = bookname, FineAmount = fineAmount, IsFineApplicable = fineApplicable});
+                    var returnBook = new ReturnBook { Bookname = bookname, FineAmount = fineAmount, IsFineApplicable = fineApplicable };
+                    _library.ReturnBooks.Add(returnBook);
                     SaveChanges();
-                    return (HttpStatusCode.OK, true);
+                    return (HttpStatusCode.OK, issueBook!);
                 }
                 else
                 {
-                    return (HttpStatusCode.BadRequest, false);
+                    return (HttpStatusCode.BadRequest, new BookIssue { });
                 }
             }
             catch (Exception ex)
             {
                 _logger.LogError($"{ex.Message}", ex);
-                return(HttpStatusCode.InternalServerError, false);
+                return(HttpStatusCode.InternalServerError, new BookIssue { });
             }
         }
         public void SaveChanges()
         {
             _library.SaveChanges(); 
+        }
+
+        public async Task<List<BookIssue>> IssuedBooksUser(string username)
+        {
+            try
+            {
+                var booksList = await _library.BookIssues.Where(u => u.Username == username).ToListAsync();
+                if (booksList.Any() && booksList != null)
+                {
+                    return booksList;
+                }
+                return new List<BookIssue> { };
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"The following Exception Occured {ex}");
+                return new List<BookIssue> { };
+            }
+        }
+
+        public async Task<List<BookIssue>> AllIssuedBooks()
+        {
+            try
+            {
+                return await _library.BookIssues.ToListAsync();
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"The following Exception Occured {ex}");
+                return new List<BookIssue> { };
+            }
         }
     }
 }

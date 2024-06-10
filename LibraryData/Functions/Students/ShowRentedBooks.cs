@@ -24,25 +24,27 @@ namespace LibraryData.Functions.Students
 
         [OpenApiOperation(operationId: "RentedBooks", tags: new[] { "" }, Visibility = OpenApiVisibilityType.Important)]
         [OpenApiParameter(name: "username", In = ParameterLocation.Query, Required = true, Visibility = OpenApiVisibilityType.Important)]
-        [OpenApiResponseWithBody(statusCode: HttpStatusCode.OK, contentType: "application/json", bodyType: typeof(IEnumerable<EbookRent>))]
+        [OpenApiResponseWithBody(statusCode: HttpStatusCode.OK, contentType: "application/json", bodyType: typeof(List<EbookRent>))]
         [OpenApiResponseWithBody(statusCode: HttpStatusCode.BadRequest, contentType: "text/plain", bodyType: typeof(string))]
         [Function("ShowRentedBooks")]
-        public async Task<IActionResult> BooksRented([HttpTrigger(AuthorizationLevel.Anonymous, "get")] HttpRequestData req)
+        public async Task<HttpResponseData> BooksRented([HttpTrigger(AuthorizationLevel.Anonymous, "get")] HttpRequestData req)
         {
             _logger.LogInformation("C# HTTP trigger function processed a request.");
             var response = await _student.RentedBooks(req.Query["username"]!);
             try
             {
+                var responseContent = req.CreateResponse();
                 if (response.Any())
                 {
-                    return new OkObjectResult(response);
+                    await responseContent.WriteAsJsonAsync(response);
+                    return responseContent;
                 }
-                return new NotFoundObjectResult("No object is Found");
+                return req.CreateResponse(HttpStatusCode.BadRequest);
             }
             catch (Exception ex)
             {
                 _logger.LogError($"Exception Occured {ex} ");
-                return new StatusCodeResult((int)HttpStatusCode.InternalServerError);
+                return req.CreateResponse(HttpStatusCode.InternalServerError);
             }
         }
     }

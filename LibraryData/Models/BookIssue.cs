@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Text.Json.Serialization;
 
 namespace LibraryData.Models;
 
@@ -15,5 +16,10 @@ public partial class BookIssue
 
     public string Category { get; set; } = null!;
 
-    public DateTime IssueDate { get; set; }
+    public DateTime IssueDate { get; set; } = DateTime.Now;
+
+    public string Username { get; set; } = null!;
+
+    [JsonIgnore]
+    public virtual Student UsernameNavigation { get; set; } = null!;
 }

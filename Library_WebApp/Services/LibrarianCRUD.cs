@@ -1,5 +1,6 @@
 ﻿using Library_WebApp.Model;
 using LibraryData.Models;
+using System;
 using System.Net;
 using System.Text;
 using System.Text.Json;
@@ -34,14 +35,20 @@ namespace Library_WebApp.Services
             return (HttpStatusCode.BadRequest, false);
         }
 
-        public Task CheckAvailability(Uri BaseUrl, SearchBooks search)
+        public async Task<(HttpStatusCode, bool)> IssueBook(Uri BaseUrl, string bookname, string username)
         {
-            throw new NotImplementedException();
-        }
-
-        public Task<T> IssueBook<T>(Uri BaseUrl, T entity) where T : class
-        {
-            throw new NotImplementedException();
+            UriBuilder uriBuilder = new UriBuilder(BaseUrl);
+            var query = HttpUtility.ParseQueryString(uriBuilder.Query);
+            query["Bookname"] = bookname;
+            query["Username"] = username;
+            uriBuilder.Query = query.ToString();
+            var content = new StringContent(string.Empty);
+            HttpResponseMessage response = await _httpClient.PostAsync(uriBuilder.Uri, content);
+            if(response.IsSuccessStatusCode)
+            {
+                return (HttpStatusCode.OK, true);
+            }
+            return (HttpStatusCode.BadRequest, false);
         }
 
         public Task<T> ReturnedBook<T>(Uri BaseUrl, T entity) where T : class
@@ -74,8 +81,7 @@ namespace Library_WebApp.Services
             var query = HttpUtility.ParseQueryString(uriBuilder.Query);
             query["Username"] = username;
             query["Password"] = password;
-            Console.WriteLine(username);
-            Console.WriteLine(password);
+
             uriBuilder.Query = query.ToString();
             HttpResponseMessage response = await _httpClient.GetAsync(uriBuilder.Uri);
             if (response.IsSuccessStatusCode)
@@ -83,6 +89,20 @@ namespace Library_WebApp.Services
                 return (HttpStatusCode.OK, true);
             }
             return (HttpStatusCode.BadRequest, false);
+        }
+
+        public async Task<List<BookIssue>> AllbooksIssued(Uri BaseUrl)
+        {
+            UriBuilder uri = new UriBuilder(BaseUrl);
+
+            HttpResponseMessage response = await _httpClient.GetAsync(uri.ToString());
+            if (response.IsSuccessStatusCode)
+            {
+                string jsonResponse = await response.Content.ReadAsStringAsync();
+                var bookDetails = Newtonsoft.Json.JsonConvert.DeserializeObject<List<BookIssue>>(jsonResponse);
+                return bookDetails!;
+            }
+            return new List<BookIssue> { };
         }
     }
 }

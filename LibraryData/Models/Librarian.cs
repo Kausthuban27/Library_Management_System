@@ -19,5 +19,5 @@ public partial class Librarian
 
     public string Phone { get; set; } = null!;
 
-    public DateTime DateOfJoining { get; set; }
+    public DateTime DateOfJoining { get; set; } = DateTime.Now;
 }

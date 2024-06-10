@@ -12,8 +12,10 @@ namespace LibraryData.Interface
     {
         Task<List<BookDetail>> SearchTheBook(SearchBooks searchBooks);
         Task<(HttpStatusCode, bool)> AddBook(LibrarianAddBook book);
-        Task<List<BookIssue>> IssueABook(string bookname);
-        Task<(HttpStatusCode, bool)> ReturnABook(string bookname);
+        Task<(HttpStatusCode, bool)> IssueABook(string bookname, string username);
+        Task<(HttpStatusCode, BookIssue)> ReturnABook(string bookname, string username);
+        Task<List<BookIssue>> IssuedBooksUser (string username);
+        Task<List<BookIssue>> AllIssuedBooks();
         void SaveChanges();
     }
 }

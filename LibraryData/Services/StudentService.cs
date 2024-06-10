@@ -98,12 +98,12 @@ namespace LibraryData.Services
             }
         }
 
-        public async Task<IEnumerable<EbookRent>> RentedBooks(string username)
+        public async Task<List<EbookRent>> RentedBooks(string username)
         {
             try
             {
-                var validUser = await _libraryContext.Students.FirstOrDefaultAsync(b => b.Username == username);
-                if(validUser != null)
+                var validUser = await _libraryContext.Students.Where(b => b.Username == username).ToListAsync();
+                if(validUser.Any() && validUser != null)
                 {
                     var rentedBooks = await _libraryContext.EbookRents.Where(b => b.Username == username && b.IsRented).ToListAsync();
                     return rentedBooks;
@@ -116,7 +116,7 @@ namespace LibraryData.Services
             catch(Exception ex)
             {
                 _logger.LogError($"An Exception Occurred : {ex} ");
-                return Enumerable.Empty<EbookRent>();
+                return new List<EbookRent> { };
             }
         }
 

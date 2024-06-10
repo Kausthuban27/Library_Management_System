@@ -29,8 +29,9 @@
     private readonly Dictionary<string, Type> sectionComponents = new()
     {
         { "Home", typeof(LibrarianDashboard) },
-        { "Search book", typeof(SearchBookRow) },
-        { "Add book", typeof(AddBook) }
+        { "Search book", typeof(SearchForBooks) },
+        { "Add book", typeof(AddBook) },
+        { "Issue book", typeof(IssueBooks) }
     };
 
     private void HandleSectionChanged(string section)

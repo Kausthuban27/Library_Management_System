@@ -11,7 +11,7 @@ namespace Library_WebApp.Services.HttpServices
     {
         private readonly LibraryDataConfiguration _libraryconfig;
         private readonly IStudentCRUD _studentCRUD;
-        private readonly Uri _registerUrl, _loginUrl, _rentUrl, _searchUrl, _rentedBooksUrl;
+        private readonly Uri _registerUrl, _loginUrl, _rentUrl, _searchUrl, _rentedBooksUrl,_issuedBooks,_returnBook;
         public StudentService(IOptions<LibraryDataConfiguration> libraryOptions, IStudentCRUD studentCRUD)
         {
             _libraryconfig = libraryOptions.Value;
@@ -26,6 +26,8 @@ namespace Library_WebApp.Services.HttpServices
             _rentUrl = new(BaseUrl, RouteConstants.RentBook);
             _searchUrl = new(BaseUrl, RouteConstants.SearchBook);
             _rentedBooksUrl = new(BaseUrl, RouteConstants.RentedBooks);
+            _issuedBooks = new(BaseUrl, RouteConstants.GetIssuedBooks);
+            _returnBook = new(BaseUrl, RouteConstants.ReturnBook);
         }
 
         public async Task<(HttpStatusCode, bool)> AddNewStudent<T>(T entity) where T : class
@@ -48,9 +50,19 @@ namespace Library_WebApp.Services.HttpServices
             return await _studentCRUD.searchBook(_searchUrl, bookname, authorname, publishername, categoryname);
         }
         
-        public async Task<IActionResult> ebookRents(string username)
+        public async Task<List<EbookRent>> ebookRents(string username)
         {
             return await _studentCRUD.ebookRents(_rentedBooksUrl, username);
+        }
+
+        public async Task<List<BookIssue>> bookIssues(string username)
+        {
+            return await _studentCRUD.userIssuedBooks(_issuedBooks, username);
+        }
+
+        public async Task<(HttpStatusCode, BookIssue)> Returnbook(string bookname, string username)
+        {
+            return await _studentCRUD.ReturnBorrowedBook(_returnBook, bookname, username);
         }
     }
 }

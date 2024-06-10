@@ -6,7 +6,6 @@ namespace LibraryData.Models;
 
 public partial class EbookRent
 {
-    [JsonIgnore]
     public int Id { get; set; }
 
     public string Bookname { get; set; } = null!;

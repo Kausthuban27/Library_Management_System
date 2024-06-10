@@ -38,7 +38,7 @@ public partial class LibrarydbContext : DbContext
     {
         modelBuilder.Entity<BookDetail>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__BookDeta__3214EC075F18547A");
+            entity.HasKey(e => e.Id).HasName("PK__BookDeta__3214EC0791D73274");
 
             entity.Property(e => e.BookAuthor).HasMaxLength(100);
             entity.Property(e => e.BookPublisher).HasMaxLength(100);
@@ -48,7 +48,7 @@ public partial class LibrarydbContext : DbContext
 
         modelBuilder.Entity<BookIssue>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__BookIssu__3214EC072B30021B");
+            entity.HasKey(e => e.Id).HasName("PK__BookIssu__3214EC0777868C27");
 
             entity.ToTable("BookIssue");
 
@@ -56,11 +56,17 @@ public partial class LibrarydbContext : DbContext
             entity.Property(e => e.BookPublisher).HasMaxLength(100);
             entity.Property(e => e.Bookname).HasMaxLength(100);
             entity.Property(e => e.Category).HasMaxLength(100);
+            entity.Property(e => e.Username).HasMaxLength(20);
+
+            entity.HasOne(d => d.UsernameNavigation).WithMany(p => p.BookIssues)
+                .HasForeignKey(d => d.Username)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("Fk_BookIssue_Username");
         });
 
         modelBuilder.Entity<BookRack>(entity =>
         {
-            entity.HasKey(e => e.RowStart).HasName("PK__BookRack__649CABECAD28F831");
+            entity.HasKey(e => e.RowStart).HasName("PK__BookRack__649CABEC82C797E3");
 
             entity.ToTable("BookRack");
 
@@ -70,7 +76,7 @@ public partial class LibrarydbContext : DbContext
 
         modelBuilder.Entity<EbookRent>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__tmp_ms_x__3214EC07971D691A");
+            entity.HasKey(e => e.Id).HasName("PK__EBookRen__3214EC07154A0C8A");
 
             entity.ToTable("EBookRent");
 
@@ -87,7 +93,7 @@ public partial class LibrarydbContext : DbContext
 
         modelBuilder.Entity<Librarian>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__tmp_ms_x__3214EC076D459D76");
+            entity.HasKey(e => e.Id).HasName("PK__Libraria__3214EC0779F2C044");
 
             entity.ToTable("Librarian");
 
@@ -102,7 +108,7 @@ public partial class LibrarydbContext : DbContext
 
         modelBuilder.Entity<ReturnBook>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__ReturnBo__3214EC0738EBBC5D");
+            entity.HasKey(e => e.Id).HasName("PK__ReturnBo__3214EC0747DBB398");
 
             entity.ToTable("ReturnBook");
 
@@ -112,15 +118,12 @@ public partial class LibrarydbContext : DbContext
 
         modelBuilder.Entity<SearchHistory>(entity =>
         {
-            entity
-                .HasNoKey()
-                .ToTable("SearchHistory");
+            entity.ToTable("SearchHistory");
 
             entity.Property(e => e.BookAuthor).HasMaxLength(100);
             entity.Property(e => e.BookName).HasMaxLength(100);
             entity.Property(e => e.BookPublisher).HasMaxLength(100);
             entity.Property(e => e.Category).HasMaxLength(100);
-            entity.Property(e => e.Id).ValueGeneratedOnAdd();
         });
 
         modelBuilder.Entity<Student>(entity =>

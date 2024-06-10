@@ -1,0 +1,65 @@
+﻿@inject IStudentService _studentService
+@inject UserStateManagementService _userStateManagement
+
+<h3 class="text-center">Your Books to return</h3>
+
+<BSDataTable Items="issuedBooks" PaginationBottom="true" RowsPerPage="5" Context="item">
+    <Header>
+        <BSDataTableHead Color="BSColor.Dark" TValue="BookIssue" Sortable="true" Column="@(nameof(BookIssue.Id))">Book Id</BSDataTableHead>
+        <BSDataTableHead Color="BSColor.Dark" TValue="BookIssue" Sortable="true" Column="@(nameof(BookIssue.Bookname))">Bookname</BSDataTableHead>
+        <BSDataTableHead Color="BSColor.Dark" TValue="BookIssue" Sortable="true" Column="@(nameof(BookIssue.BookAuthor))">Bookauthor</BSDataTableHead>
+        <BSDataTableHead Color="BSColor.Dark" TValue="BookIssue" Sortable="true" Column="@(nameof(BookIssue.BookPublisher))">Bookpublisher</BSDataTableHead>
+        <BSDataTableHead Color="BSColor.Dark" TValue="BookIssue" Sortable="true" Column="@(nameof(BookIssue.Category))">Book Category</BSDataTableHead>
+        <BSDataTableHead Color="BSColor.Dark" TValue="BookIssue" Sortable="true" Column="@(nameof(BookIssue.IssueDate.Date))">Issued On</BSDataTableHead>
+    </Header>
+    <Body>
+        <BSDataTableRow>
+            <BSTD>@item.Id</BSTD>
+            <BSTD>@item.Bookname</BSTD>
+            <BSTD>@item.BookAuthor</BSTD>
+            <BSTD>@item.BookPublisher</BSTD>
+            <BSTD>@item.Category</BSTD>
+            <BSTD>@item.IssueDate</BSTD>
+            <BSTD><button class="btn btn-primary" @onclick="async () => await ReturnTheBook(item.Bookname, item.Username)">Return</button></BSTD>
+        </BSDataTableRow>
+    </Body>
+</BSDataTable>
+
+@msg
+
+@code 
+{
+    public List<BookIssue> bookIssued { get; set; } = new();
+    public IEnumerable<BookIssue> issuedBooks => bookIssued;
+    public string msg = "";
+
+    protected override async Task OnInitializedAsync()
+    {
+        await GetIssuedBooks();
+    }
+
+    private async Task<List<BookIssue>> GetIssuedBooks()
+    {
+        var response = await _studentService.bookIssues(_userStateManagement.username);
+        if(response.Any())
+        {
+            bookIssued.AddRange(response);
+            return bookIssued;
+        }
+        return bookIssued;
+    }
+
+    private async Task ReturnTheBook(string bookname, string username)
+    {
+        var response = await _studentService.Returnbook(bookname, username);
+        if(response.Item2 != null)
+        {
+            bookIssued.Remove(response.Item2);
+            msg = "Successfully Returned";
+        }
+        else
+        {
+            msg += "Error Occured";
+        }
+    }
+}

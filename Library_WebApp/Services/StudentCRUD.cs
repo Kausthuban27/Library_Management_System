@@ -39,7 +39,7 @@ namespace Library_WebApp.Services
             return (HttpStatusCode.BadRequest, false);
         }
 
-        public async Task<IActionResult> ebookRents(Uri BaseUrl, string username)
+        public async Task<List<EbookRent>> ebookRents(Uri BaseUrl, string username)
         {
             UriBuilder uriBuilder = new UriBuilder(BaseUrl);
             var query = HttpUtility.ParseQueryString(uriBuilder.Query);
@@ -48,11 +48,13 @@ namespace Library_WebApp.Services
             HttpResponseMessage response = await _httpClient.GetAsync(uriBuilder.Uri);
             Console.WriteLine(response);
             Console.WriteLine(response.Content);
-            if(response.IsSuccessStatusCode)
+            if (response.IsSuccessStatusCode)
             {
-                return new OkObjectResult(response.Content);
+                string jsonResponse = await response.Content.ReadAsStringAsync();
+                var bookDetails = Newtonsoft.Json.JsonConvert.DeserializeObject<List<EbookRent>>(jsonResponse);
+                return bookDetails!;
             }
-            return new BadRequestObjectResult("Bad Request by User");
+            return new List<EbookRent> { };
         }
 
         public async Task<(HttpStatusCode, bool)> GetStudent(Uri BaseUrl, string username, string password)
@@ -86,6 +88,24 @@ namespace Library_WebApp.Services
             return (HttpStatusCode.BadRequest, false);
         }
 
+        public async Task<(HttpStatusCode, BookIssue)> ReturnBorrowedBook(Uri BaseUrl, string bookname, string username)
+        {
+            UriBuilder uriBuilder = new UriBuilder(BaseUrl);
+            var query = HttpUtility.ParseQueryString(uriBuilder.Query);
+            query["Bookname"] = bookname;
+            query["Username"] = username; 
+            uriBuilder.Query = query.ToString();
+            var content = new StringContent(string.Empty);
+            HttpResponseMessage response = await _httpClient.PostAsJsonAsync(uriBuilder.Uri, content);
+            if (response.IsSuccessStatusCode)
+            {
+                string jsonResponse = await response.Content.ReadAsStringAsync();
+                var bookDetails = Newtonsoft.Json.JsonConvert.DeserializeObject<BookIssue>(jsonResponse);
+                return (HttpStatusCode.OK, bookDetails!);
+            }
+            return (HttpStatusCode.BadRequest, new BookIssue { });
+        }
+
         public async Task<List<BookDetail>> searchBook(Uri BaseUrl, string? bookname, string? authorname, string? publishername, string? categoryname)
         {
             UriBuilder uriBuilder = new UriBuilder(BaseUrl);
@@ -103,6 +123,24 @@ namespace Library_WebApp.Services
                 return bookDetails!;
             }
             return new List<BookDetail> { };
+        }
+
+        public async Task<List<BookIssue>> userIssuedBooks(Uri BaseUrl, string username)
+        {
+            UriBuilder uriBuilder = new UriBuilder(BaseUrl);
+            var query = HttpUtility.ParseQueryString(uriBuilder.Query);
+
+            query["username"] = username;
+            uriBuilder.Query = query.ToString();
+
+            HttpResponseMessage response = await _httpClient.GetAsync(uriBuilder.Uri);
+            if (response.IsSuccessStatusCode)
+            {
+                string jsonResponse = await response.Content.ReadAsStringAsync();
+                var bookDetails = Newtonsoft.Json.JsonConvert.DeserializeObject<List<BookIssue>>(jsonResponse);
+                return bookDetails!;
+            }
+            return new List<BookIssue> { };
         }
     }
 }
