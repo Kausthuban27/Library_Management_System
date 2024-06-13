@@ -17,6 +17,7 @@ namespace LibraryData.Interface
         {
             this.serviceProvider = serviceProvider ?? throw new ArgumentNullException(nameof(serviceProvider));
         }
+
         public DbContextScope<T> GetDbContextScope()
         {
             var scope = serviceProvider.CreateScope();

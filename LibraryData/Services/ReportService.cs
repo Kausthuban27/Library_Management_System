@@ -40,11 +40,11 @@ namespace LibraryData.Services
                         Publisher = b.BookPublisher,
                         Category = b.Category,
                         IsRented = dbContext.EbookRents
-                                          .Where(e => e.Bookname == b.Bookname)
+                                          .Where(e => e.Bookname == b.Bookname && e.IsRented)
                                           .Select(e => e.IsRented)
                                           .FirstOrDefault(),
                         RentAmount = dbContext.EbookRents
-                                               .Where(e => e.Bookname == b.Bookname)
+                                               .Where(e => e.Bookname == b.Bookname && e.RentAmount > 0)
                                                .Select(e => e.RentAmount)
                                                .FirstOrDefault(),
                         Username = dbContext.EbookRents

@@ -1,8 +1,20 @@
 ﻿@inject ILibrarianService _librarianService
 
-<h3 class="fs-2">Books Rented By Author <InputText class="form-control" @bind-Value=bookname placeholder="Enter the Bookname" /></h3>
+<div class="container d-flex justify-content-center align-items-center mt-5">
+    <div class="border rounded p-4 w-50">
+        <form class="form-group" @onsubmit="GetRentedBooksByAuthor">
+            <div class="mb-3">
+                <label for="Bookname" class="form-label fw-bold">Bookname:</label>
+                <InputText class="form-control" type="text" id="Bookname" @bind-Value="bookname" placeholder="Enter the Bookname" />
+            </div>
+            <div class="mb-3 d-grid gap-2 d-md-flex justify-content-md-center">
+                <button class="btn btn-primary" type="submit">Submit</button>
+            </div>
+        </form>
+    </div>
+</div>
 
-@if (!string.IsNullOrEmpty(bookname))
+@if (studentRentedBooks.Any())
 {
     <DynamicTables Items="studentRentedBooks" />
 }
@@ -12,14 +24,11 @@
     public List<StudentRentedBook> studentRentedBooks { get; set; } = new();
     private string bookname = null!;
 
-    protected override async Task OnInitializedAsync()
-    {
-        await GetRentedBooksByAuthor();
-    }
-
-    private async Task GetRentedBooksByAuthor()
+    private async Task<List<StudentRentedBook>> GetRentedBooksByAuthor()
     {
         studentRentedBooks = await _librarianService.studentRentedBooks(bookname);
+        bookname = string.Empty;
         StateHasChanged();
+        return studentRentedBooks;
     }
 }

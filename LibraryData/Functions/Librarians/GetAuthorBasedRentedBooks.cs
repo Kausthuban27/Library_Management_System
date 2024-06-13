@@ -31,7 +31,6 @@ namespace LibraryData.Functions.Librarians
         {
             _logger.LogInformation("C# HTTP trigger function processed a request.");
             var res = await _report.Get_Student_Rented_Books(req.Query["Bookname"]!);
-
             var response = req.CreateResponse();
             await response.WriteAsJsonAsync(res);
             return response;
