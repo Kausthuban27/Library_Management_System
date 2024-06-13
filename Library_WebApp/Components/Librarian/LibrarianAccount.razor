@@ -1,0 +1,67 @@
+﻿@inject UserStateManagementService _userStateManagement
+@inject ILibrarianService _librarianService
+
+<h3 class="text-center">Librarian Registration</h3>
+<div class="container d-flex justify-content-center align-items-center mt-5">
+    <div class="border rounded p-4 w-50">
+        <EditForm FormName="UpdateForm" Model="librarian" OnSubmit="UpdateLibrarian">
+            <div class="mb-3">
+                <label for="firstname" class="form-label fw-bold">Firstname:</label>
+                <InputText class="form-control" type="text" id="firstname" @bind-Value="librarian.Firstname" placeholder="Enter the Firstname" />
+            </div><div class="mb-3">
+                <label for="lastname" class="form-label fw-bold">Lastname:</label>
+                <InputText class="form-control" type="text" id="lastname" @bind-Value="librarian.Lastname" placeholder="Enter the Lastname" />
+            </div><div class="mb-3">
+                <label for="username" class="form-label fw-bold">Username:</label>
+                <InputText class="form-control" type="text" id="username" @bind-Value="librarian.Username" placeholder="Enter the Username" />
+            </div>
+            <div class="mb-3">
+                <label for="email" class="form-label fw-bold">Email:</label>
+                <InputText class="form-control" type="email" id="email" @bind-Value="librarian.Email" placeholder="Enter Your Email" />
+            </div>
+            <div class="mb-3">
+                <label for="password" class="form-label fw-bold">Password:</label>
+                <InputText class="form-control" type="password" id="password" @bind-Value="librarian.Password" placeholder="Enter the Password" />
+            </div>
+            <div class="mb-3">
+                <label for="phone" class="form-label fw-bold">Phone:</label>
+                <InputText class="form-control" type="text" id="phone" @bind-Value="librarian.Phone" placeholder="Enter the Phone number" />
+            </div>
+            <div class="mb-3 d-grid gap-2 d-md-flex justify-content-md-center">
+                <button class="btn btn-primary" type="submit">Update</button>
+                <button class="btn btn-secondary" type="button" @onclick="() => OnCancel.InvokeAsync()">Cancel</button>
+            </div>
+        </EditForm>
+    </div>
+</div>
+
+@code 
+{
+    public AddNewLibrarian librarian { get; set; } = new();
+    [Parameter]
+    public EventCallback OnCancel { get; set; }
+
+    private string? errorMessage;
+
+    protected override async Task OnInitializedAsync()
+    {
+        await LoadLibrarianProfile();
+    }
+
+    private async Task LoadLibrarianProfile()
+    {
+        try
+        {
+            librarian = await _librarianService.RetrieveLibrarian(_userStateManagement.username);
+        }
+        catch (Exception ex)
+        {
+            errorMessage = $"Error loading profile: {ex.Message}";
+        }
+    }
+
+    private async void UpdateLibrarian()
+    {
+        var res = await _librarianService.UpdateExistingLibrarian<AddNewLibrarian>(librarian);
+    }
+}

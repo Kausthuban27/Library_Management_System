@@ -4,6 +4,8 @@ using BlazorStrap;
 using Library_WebApp.Model;
 using Library_WebApp.Services;
 using Library_WebApp.Services.HttpServices;
+using LibraryData.Utilities;
+using Microsoft.Extensions.Hosting;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -12,9 +14,11 @@ builder.Services.AddRazorPages();
 builder.Services.AddServerSideBlazor();
 builder.Services.AddBlazorStrap();
 builder.Services.AddHttpServices();
+builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
 builder.Services.Configure<LibraryDataConfiguration>(builder.Configuration.GetSection("LibraryDataApi"));
 var app = builder.Build();
+LibrarianMapper.Initialize(app.Services);
 
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())

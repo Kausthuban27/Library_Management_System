@@ -176,5 +176,19 @@ namespace LibraryData.Services.BookServices
                 return new List<BookIssue> { };
             }
         }
+
+        public async Task<List<BooksWithFine>> BooksReturnWithFine()
+        {
+            var booksWithFine = await _library.ReturnBooks
+            .Where(rb => rb.FineAmount > 0) 
+            .Select(rb => new BooksWithFine
+            {
+                bookname = rb.Bookname,
+                fineAmount = rb.FineAmount
+            })
+            .ToListAsync();
+
+            return booksWithFine;
+        }
     }
 }

@@ -14,5 +14,6 @@ namespace Library_WebApp.Services
         public Task<(HttpStatusCode, BookIssue)> ReturnBorrowedBook(Uri BaseUrl, string bookname, string username);
         public Task<List<BookDetail>> searchBook(Uri BaseUrl, string? bookname, string? authorname, string? publishername, string? categoryname);
         public Task<List<BookIssue>> userIssuedBooks(Uri BaseUrl, string username);
+        public Task<List<BooksWithFine>> booksWithFine(Uri BaseUrl);
     }
 }

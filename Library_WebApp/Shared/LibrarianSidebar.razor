@@ -55,6 +55,12 @@
             </div>
         </li>
         <li class="nav-item">
+            <div class='@GetNavLinkClass("Books with Fine")' @onclick='() => NavigateToSection("Books with Fine")'>
+                Books with Fine
+            </div>
+        </li>
+
+        <li class="nav-item">
             <div class="nav-link text-white pe-auto" @onclick='() => Logout(true)'>
                 Logout
             </div>
@@ -70,7 +76,11 @@
                 </BSToggle>
             </Toggler>
             <Content>
-                <BSDropdownItem>Account</BSDropdownItem>
+                <BSDropdownItem>
+                    <div class='@GetNavLinkClass("Librarian Account") text-black' @onclick='() => NavigateToSection("Librarian Account")'>
+                        Account
+                    </div>
+                </BSDropdownItem>
                 <BSDropdownItem>Settings</BSDropdownItem>
             </Content>
         </BSDropdown>

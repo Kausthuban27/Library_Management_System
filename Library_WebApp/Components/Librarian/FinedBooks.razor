@@ -1,0 +1,39 @@
+﻿@inject IStudentService _studentService
+
+<div>
+    <h3 class="text-center">Books With Fine</h3>
+    <div class="table-responsive">
+        <table class="table table-bordered table-hover">
+            <thead>
+                <tr>
+                    <th>Book Name</th>
+                    <th>Amount Fine</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in finedBooks)
+                {
+                    <tr>
+                        <td>@item.bookname</td>
+                        <td>@item.fineAmount</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+
+@code 
+{
+    public List<BooksWithFine> finedBooks { get; set; } = new();
+
+    protected override async Task OnInitializedAsync()
+    {
+        await booksWithFineAmount();
+    }
+
+    private async Task<List<BooksWithFine>> booksWithFineAmount()
+    {
+        return await _studentService.booksWithFine();
+    }
+}

@@ -1,0 +1,25 @@
+﻿@inject ILibrarianService _librarianService
+
+<h3 class="fs-2">Books Rented By Author <InputText class="form-control" @bind-Value=bookname placeholder="Enter the Bookname" /></h3>
+
+@if (!string.IsNullOrEmpty(bookname))
+{
+    <DynamicTables Items="studentRentedBooks" />
+}
+
+@code 
+{
+    public List<StudentRentedBook> studentRentedBooks { get; set; } = new();
+    private string bookname = null!;
+
+    protected override async Task OnInitializedAsync()
+    {
+        await GetRentedBooksByAuthor();
+    }
+
+    private async Task GetRentedBooksByAuthor()
+    {
+        studentRentedBooks = await _librarianService.studentRentedBooks(bookname);
+        StateHasChanged();
+    }
+}

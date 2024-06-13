@@ -142,5 +142,19 @@ namespace Library_WebApp.Services
             }
             return new List<BookIssue> { };
         }
+
+        public async Task<List<BooksWithFine>> booksWithFine(Uri BaseUrl)
+        {
+            UriBuilder uri = new UriBuilder(BaseUrl);
+
+            HttpResponseMessage response = await _httpClient.GetAsync(uri.ToString());
+            if (response.IsSuccessStatusCode)
+            {
+                string jsonResponse = await response.Content.ReadAsStringAsync();
+                var bookDetails = Newtonsoft.Json.JsonConvert.DeserializeObject<List<BooksWithFine>>(jsonResponse);
+                return bookDetails!;
+            }
+            return new List<BooksWithFine> { };
+        }
     }
 }

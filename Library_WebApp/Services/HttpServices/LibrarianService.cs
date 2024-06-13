@@ -1,6 +1,7 @@
 ﻿using Library_WebApp.Model;
 using LibraryData;
 using LibraryData.Models;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 using System.Net;
 
@@ -10,7 +11,7 @@ namespace Library_WebApp.Services.HttpServices
     {
         private readonly LibraryDataConfiguration _libraryconfig;
         private readonly ILibrarianCRUD _librarianCRUD;
-        private readonly Uri _registerUrl, _loginUrl, _newBookUrl, _issueBookUrl,_AllBooks;
+        private readonly Uri _registerUrl, _loginUrl, _newBookUrl, _issueBookUrl,_AllBooks,_retireveLibrarian,_updateLibrarian,_studentRentedBooks;
         public LibrarianService(IOptions<LibraryDataConfiguration> libraryOptions, ILibrarianCRUD librarianCRUD)
         {
             _libraryconfig = libraryOptions.Value;
@@ -25,6 +26,9 @@ namespace Library_WebApp.Services.HttpServices
             _newBookUrl = new(BaseUrl, RouteConstants.AddBook);
             _issueBookUrl = new(BaseUrl, RouteConstants.IssueBook);
             _AllBooks = new(BaseUrl, RouteConstants.AllIssuedBooks);
+            _retireveLibrarian = new(BaseUrl, RouteConstants.RetrieveLibrarian);
+            _updateLibrarian = new(BaseUrl, RouteConstants.UpdatedLibrarian);
+            _studentRentedBooks = new(BaseUrl, RouteConstants.GetAuthorBasedRentedBooks);
         }
 
         public async Task<(HttpStatusCode, bool)> AddNewBook<T>(T entity) where T : class
@@ -50,6 +54,21 @@ namespace Library_WebApp.Services.HttpServices
         public async Task<(HttpStatusCode, bool)> IssueBook(string bookname, string username)
         {
             return await _librarianCRUD.IssueBook(_issueBookUrl, bookname, username);
+        }
+
+        public async Task<AddNewLibrarian> RetrieveLibrarian(string username)
+        {
+            return await _librarianCRUD.RetrieveExistingLibrarian(_retireveLibrarian, username);
+        }
+
+        public async Task<List<StudentRentedBook>> studentRentedBooks(string bookname)
+        {
+            return await _librarianCRUD.GetStudentRentedBook(_studentRentedBooks, bookname);
+        }
+
+        public async Task<IActionResult> UpdateExistingLibrarian<T>(T entity) where T : class
+        {
+            return await _librarianCRUD.UpdateLibrarian(_updateLibrarian, entity);
         }
     }
 }

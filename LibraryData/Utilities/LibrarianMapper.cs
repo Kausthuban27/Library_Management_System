@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using LibraryData.Models;
+using LibraryData.Services;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;
@@ -11,7 +12,7 @@ namespace LibraryData.Utilities
 {
     public static class LibrarianMapper
     {
-        private static IMapper? _mapper;
+        private static IMapper _mapper = null!;
 
         public static void Initialize(IServiceProvider serviceProvider)
         {
@@ -51,6 +52,14 @@ namespace LibraryData.Utilities
                 throw new InvalidOperationException("Mapper is not initialized. Call Initialize method first");
             }
             return _mapper.Map<T>(book);
+        }
+        public static T MapRetrievedLibrarian<T>(Librarian librarian)
+        {
+            if(_mapper == null)
+            {
+                throw new InvalidOperationException("Mapper is not initialized. Call Initialize method first");
+            }
+            return _mapper.Map<T>(librarian);
         }
     }
 }

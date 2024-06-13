@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using LibraryData.Exceptions;
 using LibraryData.Interface;
+using LibraryData.Model;
 using LibraryData.Models;
 using LibraryData.Utilities;
 using Microsoft.AspNetCore.Mvc;
@@ -71,6 +72,46 @@ namespace LibraryData.Services
                 _logger.LogError(ex, "Get Librarian: An unexpected error occurred.");
                 return new StatusCodeResult(500);
             }
+        }
+
+        public async Task<Librarian> RetrieveLibrarianData(string username)
+        {
+            try
+            {
+                var librarian = await _libraryContext.Librarians.Where(u => u.Username == username).FirstOrDefaultAsync();
+                if(librarian != null)
+                {
+                    return librarian;
+                }
+                else
+                {
+                    throw new Exception("No records Found");
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Following exception Occured {ex} ");
+                throw new Exception("Program Failed");
+            }
+        }
+
+        public async Task<IActionResult> UpdateLibrarian(AddNewLibrarian entity)
+        {
+            if (entity == null)
+            {
+                return new NotFoundResult();
+            }
+
+            _libraryContext.Librarians.Where(u => u.Username == entity.Username)
+                    .ExecuteUpdate(b => b.SetProperty(u => u.Firstname, entity.Firstname)
+                        .SetProperty(u => u.Lastname, entity.Lastname)
+                        .SetProperty(u => u.Password, entity.Password)
+                        .SetProperty(u => u.Email, entity.Email)
+                        .SetProperty(u => u.Phone, entity.Phone));
+
+                await _libraryContext.SaveChangesAsync();
+
+            return new OkObjectResult("");
         }
     }
 }

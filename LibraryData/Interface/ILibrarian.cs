@@ -1,4 +1,5 @@
-﻿using LibraryData.Models;
+﻿using LibraryData.Model;
+using LibraryData.Models;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
@@ -14,5 +15,7 @@ namespace LibraryData.Interface
     {
         Task<IActionResult> GetLibrarian(string username, string password);
         Task<(HttpStatusCode, bool)> AddLibrarian(AddNewLibrarian librarian);
+        Task<Librarian> RetrieveLibrarianData(string username);
+        Task<IActionResult> UpdateLibrarian(AddNewLibrarian entity);
     }
 }

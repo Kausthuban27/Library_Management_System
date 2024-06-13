@@ -1,5 +1,8 @@
 ﻿using AutoMapper;
+using LibraryData.Model;
 using LibraryData.Models;
+using Microsoft.Azure.WebJobs.Extensions.OpenApi.Core.Extensions;
+using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -25,6 +28,8 @@ namespace LibraryData.Utilities
             CreateMap<BookDetail, BookIssue>()
                 .ForMember(dest => dest.Id, opt => opt.Ignore())
                 .ForMember(dest => dest.IssueDate, opt => opt.Ignore());
+
+            CreateMap<Librarian, AddNewLibrarian>();
         }
     }
 }

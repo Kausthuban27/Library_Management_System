@@ -1,0 +1,31 @@
+﻿@typeparam TItem
+
+<div class="table-responsive">
+    <table class="table table-bordered table-hover">
+        <thead>
+            <tr>
+                @foreach(var items in typeof(TItem).GetProperties())
+                {
+                    <th>@items.Name</th>
+                }
+            </tr>
+        </thead>
+        <tbody>
+            @foreach(var item in Items)
+            {
+                <tr>
+                    @foreach(var props in typeof(TItem).GetProperties())
+                    {
+                        <td>@props.GetValue(item)</td>
+                    }
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+
+@code 
+{
+    [Parameter]
+    public IEnumerable<TItem> Items { get; set; } = null!;
+}

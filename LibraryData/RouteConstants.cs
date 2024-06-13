@@ -16,5 +16,9 @@ namespace LibraryData
         public const string GetIssuedBooks = "GetIssuedBooks";
         public const string AllIssuedBooks = "AllIssuedBooks";
         public const string ReturnBook = "ReturnBook";
+        public const string BooksWithFineAmount = "BooksWithFineAmount";
+        public const string RetrieveLibrarian = "RetrieveLibrarian";
+        public const string UpdatedLibrarian = "UpdateLibrarian";
+        public const string GetAuthorBasedRentedBooks = "GetAuthorBasedRentedBooks";
     }
 }

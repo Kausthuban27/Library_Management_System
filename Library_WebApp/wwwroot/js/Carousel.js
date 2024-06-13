@@ -1,10 +1,11 @@
-﻿window.initializeCarousel = () =>
-    {
-        $('#carouselExampleIndicators').carousel({ interval: 2000 });
+﻿window.initializeCarousel = (id) => {
+    $('#' + id).carousel();
+};
 
-    $('#carouselExampleIndicators-prev').click ( 
-            () => $('#carouselExampleIndicators').carousel('prev') );
-    $('#carouselExampleIndicators-next').click ( 
-            () => $('#carouselExampleIndicators').carousel('next') );
+window.nextSlide = (id) => {
+    $('#' + id).carousel('next');
+};
 
-}
+window.prevSlide = (id) => {
+    $('#' + id).carousel('prev');
+};

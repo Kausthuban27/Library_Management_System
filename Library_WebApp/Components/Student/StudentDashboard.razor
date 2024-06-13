@@ -1,41 +1,42 @@
 ﻿@using Microsoft.AspNetCore.Mvc
 @inject IStudentService _studentService
 @inject UserStateManagementService _userStateManagement
+@inject IJSRuntime JSRuntime
 
 <h3 class="text-center fs-3">Your Dashboard</h3>
 
 <div>
     <h3>Books Rented</h3>
-    <BSDataTable Items="rentedBooks" PaginationBottom="true" StartPage="1" RowsPerPage="5" Context="item">
-        <Header>
-            <BSDataTableHead Color="BSColor.Dark" TValue="EbookRent" Sortable="true" Column="@(nameof(EbookRent.Id))">Book Id</BSDataTableHead>
-            <BSDataTableHead Color="BSColor.Dark" TValue="EbookRent" Sortable="true" Column="@(nameof(EbookRent.Bookname))">Book name</BSDataTableHead>
-            <BSDataTableHead Color="BSColor.Dark" TValue="EbookRent" Sortable="true" Column="@(nameof(EbookRent.Category))">Book Category</BSDataTableHead>
-            <BSDataTableHead Color="BSColor.Dark" TValue="EbookRent" Sortable="true" Column="@(nameof(EbookRent.RentAmount))">Amount Rented</BSDataTableHead>
-        </Header>
-        <Body>
-            <BSDataTableRow>
-                <BSTD>
-                    @item.Id
-                </BSTD>
-                <BSTD>
-                    @item.Bookname
-                </BSTD>
-                <BSTD>
-                    @item.Category
-                </BSTD>
-                <BSTD>
-                    @item.RentAmount
-                </BSTD>
-            </BSDataTableRow>
-        </Body>
-    </BSDataTable>
-</div> 
+    <div class="table-responsive">
+        <table class="table table-bordered table-hover" id="rentedBooksTable">
+            <thead>
+                <tr>
+                    <th>Book Id</th>
+                    <th>Book Name</th>
+                    <th>Book Category</th>
+                    <th>Amount Rented</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in rentedBooks)
+                {
+                    <tr>
+                        <td>@item.Id</td>
+                        <td>@item.Bookname</td>
+                        <td>@item.Category</td>
+                        <td>@item.RentAmount</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
 
-@code 
+@code
 {
     public IEnumerable<EbookRent> rentedBooks => ebookRents;
     public List<EbookRent> ebookRents { get; set; } = new();
+    public string TableId => "rentedBooksTable"; 
 
     protected override async Task OnInitializedAsync()
     {
@@ -50,7 +51,20 @@
             ebookRents.AddRange(response);
             return ebookRents;
         }
-        
-        return new List<EbookRent> {};
+
+        return new List<EbookRent> { };
+    }
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            await InitializeKeyboardNavigation(TableId);
+        }
+    }
+
+    private async Task InitializeKeyboardNavigation(string tableId) 
+    {
+        await JSRuntime.InvokeVoidAsync("initializeKeyboardNavigation", tableId); 
     }
 }

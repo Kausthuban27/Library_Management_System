@@ -16,6 +16,7 @@ namespace LibraryData.Interface
         Task<(HttpStatusCode, BookIssue)> ReturnABook(string bookname, string username);
         Task<List<BookIssue>> IssuedBooksUser (string username);
         Task<List<BookIssue>> AllIssuedBooks();
+        Task<List<BooksWithFine>> BooksReturnWithFine();
         void SaveChanges();
     }
 }

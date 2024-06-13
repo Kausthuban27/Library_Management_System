@@ -13,5 +13,6 @@ namespace Library_WebApp.Services.HttpServices
         public Task<List<EbookRent>> ebookRents(string username);
         public Task<List<BookDetail>> searchBook(string? bookname, string? authorname, string? publishername, string? categoryname);
         public Task<List<BookIssue>> bookIssues(string username);
+        public Task<List<BooksWithFine>> booksWithFine();
     }
 }
