@@ -11,7 +11,7 @@ namespace Library_WebApp.Services.HttpServices
         public Task<(HttpStatusCode, bool)> Rentbook(string bookname, string username);
         public Task<(HttpStatusCode, BookIssue)> Returnbook(string bookname, string username);
         public Task<List<EbookRent>> ebookRents(string username);
-        public Task<List<BookDetail>> searchBook(string? bookname, string? authorname, string? publishername, string? categoryname);
+        public Task<List<BookDetail>> searchBook(string? property);
         public Task<List<BookIssue>> bookIssues(string username);
         public Task<List<BooksWithFine>> booksWithFine();
         public Task<List<EbookRentReport>> GetEbookRentedMonthly();

@@ -111,14 +111,11 @@ namespace Library_WebApp.Services
             return (HttpStatusCode.BadRequest, new BookIssue { });
         }
 
-        public async Task<List<BookDetail>> searchBook(Uri BaseUrl, string? bookname, string? authorname, string? publishername, string? categoryname)
+        public async Task<List<BookDetail>> searchBook(Uri BaseUrl, string? property)
         {
             UriBuilder uriBuilder = new UriBuilder(BaseUrl);
             var query = HttpUtility.ParseQueryString(uriBuilder.Query);
-            query["Bookname"] = bookname;
-            query["Authorname"] = authorname;
-            query["Publishername"] = publishername;
-            query["Categoryname"] = categoryname;
+            query["Properties"] = property;
             uriBuilder.Query = query.ToString();
             HttpResponseMessage response = await _httpClient.GetAsync(uriBuilder.Uri);
             if (response.IsSuccessStatusCode)

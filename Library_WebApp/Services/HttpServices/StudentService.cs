@@ -47,9 +47,9 @@ namespace Library_WebApp.Services.HttpServices
             return await _studentCRUD.Rentbook(_rentUrl, bookname, username);
         }
 
-        public async Task<List<BookDetail>> searchBook(string? bookname, string? authorname, string? publishername, string? categoryname)
+        public async Task<List<BookDetail>> searchBook(string? property)
         {
-            return await _studentCRUD.searchBook(_searchUrl, bookname, authorname, publishername, categoryname);
+            return await _studentCRUD.searchBook(_searchUrl, property);
         }
         
         public async Task<List<EbookRent>> ebookRents(string username)

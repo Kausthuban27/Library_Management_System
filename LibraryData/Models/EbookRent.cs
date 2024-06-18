@@ -15,7 +15,7 @@ public partial class EbookRent
 
     public decimal RentAmount { get; set; }
 
-    public DateTime IssuedOn { get; set; } = DateTime.Now;
+    public DateTime IssuedOn { get; set; }
 
     public string Username { get; set; } = null!;
 

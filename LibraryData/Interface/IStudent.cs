@@ -17,7 +17,7 @@ namespace LibraryData.Interface
         Task<IActionResult> GetStudent(string username, string password);
         Task<(HttpStatusCode, bool)> AddStudent(AddNewStudent student);
         Task<(HttpStatusCode, bool)> RentEBook(string bookname, string username);
-        Task<List<EbookRent>> RentedBooks(string username);
+        Task<List<EbookRent>> RentedBooks<T>(string username) where T : class;
         Task<List<T>> ExecuteMyStoredProcedureAsync<T>() where T : class;
         void SaveChanges();
     }

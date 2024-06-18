@@ -24,6 +24,6 @@ BEGIN
 		CLOSE item;
 		DEALLOCATE item;
 
-		EXEC @sql;
+		EXEC (@sql);
 END
 RETURN 0

@@ -7,8 +7,10 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Net;
+using System.Reflection.Metadata;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -52,8 +54,8 @@ namespace LibraryData.Services.BookServices
             {
                 if(searchBooks != null)
                 {
-                    var parameterValue = new SqlParameter("@p0", searchBooks);
-                    var query = "EXEC [dbo].[SearchForBook] @p0";
+                    var parameterValue = new SqlParameter("@searchTerms", SqlDbType.NVarChar) { Value = searchBooks };
+                    var query = "EXEC [dbo].[SearchForBook] @searchTerms";
 
                     var result = await _library.Set<T>().FromSqlRaw(query, parameterValue).ToListAsync();
                     return result;

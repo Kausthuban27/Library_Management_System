@@ -8,16 +8,7 @@
                     <h3>Search For Book</h3>
                 </div>
                 <div class="mb-3">
-                    <InputText type="text" placeholder="Enter the Book name" class="form-control" @bind-Value="searchBooks.bookName" />
-                </div>
-                <div class="mb-3">
-                    <InputText type="text" placeholder="Enter the Author name" class="form-control" @bind-Value="searchBooks.authorName" />
-                </div>
-                <div class="mb-3">
-                    <InputText type="text" placeholder="Enter Book Publisher name" class="form-control" @bind-Value="searchBooks.publisherName" />
-                </div>
-                <div class="mb-3">
-                    <InputText type="text" placeholder="Enter Category name" class="form-control" @bind-Value="searchBooks.categoryName" />
+                    <InputText type="text" placeholder="Enter Bookname, Author, Publisher or Category" class="form-control" @bind-Value="searchBooks.bookName" />
                 </div>
                 <button class="btn btn-primary" type="submit">Submit</button>
             </EditForm>
@@ -68,7 +59,7 @@
 
     private async Task<List<BookDetail>> SeachForBook()
     {
-        var response = await _studentService.searchBook(searchBooks.bookName, searchBooks.authorName, searchBooks.publisherName, searchBooks.categoryName);
+        var response = await _studentService.searchBook(searchBooks.bookName);
         if(response.Any())
         {
             bookDetails.AddRange(response);

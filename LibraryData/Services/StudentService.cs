@@ -108,7 +108,7 @@ namespace LibraryData.Services
             }
         }
 
-        public async Task<List<EbookRent>> RentedBooks(string username)
+        public async Task<List<EbookRent>> RentedBooks<T>(string username) where T : class
         {
             try
             {
