@@ -23,17 +23,14 @@ namespace LibraryData.Functions.Librarians
         }
 
         [OpenApiOperation(operationId: "GetAuthorBasedRentedBooks", tags: new[] {" "}, Visibility = OpenApiVisibilityType.Important)]
-        [OpenApiParameter(name: "Bookname", In = ParameterLocation.Query, Required = true, Visibility = OpenApiVisibilityType.Important)]
+        [OpenApiParameter(name: "Authorname", In = ParameterLocation.Query, Required = true, Visibility = OpenApiVisibilityType.Important)]
         [OpenApiResponseWithBody(statusCode: HttpStatusCode.OK, contentType: "application/json", bodyType: typeof(StudentRentedBook))]
         [OpenApiResponseWithBody(statusCode: HttpStatusCode.BadRequest, contentType: "text/plain", bodyType: typeof(string))]
         [Function("GetAuthorBasedRentedBooks")]
         public async Task<HttpResponseData> GetRentedBooks([HttpTrigger(AuthorizationLevel.Anonymous, "get")] HttpRequestData req)
         {
             _logger.LogInformation("C# HTTP trigger function processed a request.");
-            var res = await _report.Get_Student_Rented_Books(req.Query["Bookname"]!);
-            var response = req.CreateResponse();
-            await response.WriteAsJsonAsync(res);
-            return response;
+            return await FunctionService.CreateGetResponse(req, async () => await _report.Get_Student_Rented_Books(req.Query["Authorname"]!), _logger);
         }
     }
 }

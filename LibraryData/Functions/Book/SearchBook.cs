@@ -31,27 +31,14 @@ namespace LibraryData.Functions.Book
         [Function("SearchBook")]
         public async Task<HttpResponseData> SearchBooks([HttpTrigger(AuthorizationLevel.Anonymous, "get")] HttpRequestData req)
         {
-            _logger.LogInformation("C# HTTP trigger function processed a request.");
-
-            var query = req.Query;
-
-            var request = await JsonHelper.SerializeRequest(req);
-            if (request == null)
+            var res = req.CreateResponse();
+            var result = await _book.SearchTheBook<BookDetail>(req.Query["Properties"]!.ToString());
+            if (result == null)
             {
-                throw new ArgumentNullException(nameof(req));
+                res.StatusCode = HttpStatusCode.BadRequest;
             }
-            var response =await _book.SearchTheBook(request);
-
-            var responseContent = req.CreateResponse();
-            if (response.Any())
-            {
-                await responseContent.WriteAsJsonAsync(response);
-                return responseContent;
-            }
-            else
-            {
-                return req.CreateResponse(HttpStatusCode.BadRequest);
-            }
+            await res.WriteAsJsonAsync(result);
+            return res;
         }
     }
 }

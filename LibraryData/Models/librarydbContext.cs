@@ -76,12 +76,13 @@ public partial class LibrarydbContext : DbContext
 
         modelBuilder.Entity<EbookRent>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__EBookRen__3214EC07154A0C8A");
+            entity.HasKey(e => e.Id).HasName("PK__EBookRen__3214EC0709550478");
 
             entity.ToTable("EBookRent");
 
             entity.Property(e => e.Bookname).HasMaxLength(100);
             entity.Property(e => e.Category).HasMaxLength(100);
+            entity.Property(e => e.IssuedOn).HasPrecision(6);
             entity.Property(e => e.RentAmount).HasColumnType("decimal(5, 0)");
             entity.Property(e => e.Username).HasMaxLength(20);
 

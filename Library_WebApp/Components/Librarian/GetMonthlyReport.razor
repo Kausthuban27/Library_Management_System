@@ -1,0 +1,39 @@
+﻿@inject IStudentService _studentService
+
+<h3 class="text-center fs-3">Get Monthly Report of E-books Rented</h3>
+
+@if (ebookRents != null)
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Bookname</th>
+                <th>Is Rented</th>
+                <th>Rent Amount</th>
+                <th>Username</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var rent in ebookRents)
+            {
+                <tr>
+                    <td>@rent.Bookname</td>
+                    <td>@rent.IsRented</td>
+                    <td>@rent.RentAmount</td>
+                    <td>@rent.Username</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
+@code 
+{
+    private List<EbookRentReport> ebookRents = new();
+
+    protected override async Task OnInitializedAsync()
+    {
+        ebookRents = await _studentService.GetEbookRentedMonthly();
+        StateHasChanged();
+    }
+}

@@ -58,6 +58,7 @@
   <ItemGroup>
     <Folder Include="Properties" />
     <Folder Include="Tables" />
+    <Folder Include="Stored_Procedure" />
   </ItemGroup>
   <ItemGroup>
     <Build Include="Tables\BookDetails.sql" />
@@ -68,5 +69,7 @@
     <Build Include="Tables\ReturnBook.sql" />
     <Build Include="Tables\Student.sql" />
     <Build Include="Tables\SearchHistory.sql" />
+    <Build Include="Stored_Procedure\Get_Rented_Books_By_Month.sql" />
+    <Build Include="Stored_Procedure\SearchForBook.sql" />
   </ItemGroup>
 </Project>

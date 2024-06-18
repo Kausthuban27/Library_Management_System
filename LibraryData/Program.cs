@@ -27,6 +27,7 @@ var host = new HostBuilder()
         services.AddScoped<ILibrarian, LibrarianService>();
         services.AddSingleton<IScopedDbContext<LibrarydbContext>, ScopedDbContext<LibrarydbContext>>();
         services.AddTransient<ReportService>();
+        services.AddSingleton<FunctionService>();
         services.AddScoped<IBook, BookCRUD>();
         services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
         services.AddCors(options => options.AddPolicy("AllowAny", policy => policy.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader()));

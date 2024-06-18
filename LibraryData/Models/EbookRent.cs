@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text.Json.Serialization;
 
 namespace LibraryData.Models;
 
@@ -16,8 +15,9 @@ public partial class EbookRent
 
     public decimal RentAmount { get; set; }
 
+    public DateTime IssuedOn { get; set; } = DateTime.Now;
+
     public string Username { get; set; } = null!;
 
-    [JsonIgnore]
     public virtual Student UsernameNavigation { get; set; } = null!;
 }

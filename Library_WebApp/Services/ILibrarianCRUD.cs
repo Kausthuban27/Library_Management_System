@@ -12,7 +12,7 @@ namespace Library_WebApp.Services
         public Task<AddNewLibrarian> RetrieveExistingLibrarian(Uri BaseUrl, string username);
         public Task<IActionResult> UpdateLibrarian<T>(Uri BaseUrl, T entity) where T : class;
         public Task<(HttpStatusCode, bool)> IssueBook(Uri BaseUrl, string bookname, string username);
-        public Task<List<StudentRentedBook>> GetStudentRentedBook(Uri BaseUrl, string bookname);
+        public Task<List<StudentRentedBook>> GetStudentRentedBook(Uri BaseUrl, string authorname);
         public Task<T> ReturnedBook<T>(Uri BaseUrl, T entity) where T: class;
         public Task<(HttpStatusCode, bool)> AddBook<T>(Uri BaseUrl, T entity) where T : class;
         public Task<List<BookIssue>> AllbooksIssued(Uri BaseUrl);

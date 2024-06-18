@@ -12,6 +12,7 @@ using Microsoft.AspNetCore.Mvc;
 using System.Web.Http;
 using Microsoft.Extensions.Logging;
 using LibraryData.Utilities;
+using Microsoft.Data.SqlClient;
 
 namespace LibraryData.Services
 {
@@ -51,6 +52,15 @@ namespace LibraryData.Services
                 Console.WriteLine($"Exception is thrown {ex}");
                 return (HttpStatusCode.BadRequest, false);
             }
+        }
+
+        public async Task<List<T>> ExecuteMyStoredProcedureAsync<T>() where T : class
+        {
+            var parameterValue = new SqlParameter("@p0", DateTime.Now.Date);
+            var query = "EXEC [dbo].[Get_Rented_Books_By_Month] @p0";
+
+            var result = await _libraryContext.Set<T>().FromSqlRaw(query, parameterValue).ToListAsync();
+            return result;
         }
 
         public async Task<IActionResult> GetStudent(string username, string password)

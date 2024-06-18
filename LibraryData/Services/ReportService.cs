@@ -42,15 +42,15 @@ namespace LibraryData.Services
                         IsRented = dbContext.EbookRents
                                           .Where(e => e.Bookname == b.Bookname && e.IsRented)
                                           .Select(e => e.IsRented)
-                                          .FirstOrDefault(),
+                                          .First(),
                         RentAmount = dbContext.EbookRents
                                                .Where(e => e.Bookname == b.Bookname && e.RentAmount > 0)
                                                .Select(e => e.RentAmount)
-                                               .FirstOrDefault(),
+                                               .First(),
                         Username = dbContext.EbookRents
                                            .Where(e => e.Bookname == b.Bookname)
                                            .Select(e => e.Username)
-                                           .FirstOrDefault()
+                                           .First()
                     }).ToListAsync();
                 booksData = rentedBooks;
 #pragma warning restore CS8601 // Possible null reference assignment.

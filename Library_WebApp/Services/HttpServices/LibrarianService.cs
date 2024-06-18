@@ -61,9 +61,9 @@ namespace Library_WebApp.Services.HttpServices
             return await _librarianCRUD.RetrieveExistingLibrarian(_retireveLibrarian, username);
         }
 
-        public async Task<List<StudentRentedBook>> studentRentedBooks(string bookname)
+        public async Task<List<StudentRentedBook>> studentRentedBooks(string authorname)
         {
-            return await _librarianCRUD.GetStudentRentedBook(_studentRentedBooks, bookname);
+            return await _librarianCRUD.GetStudentRentedBook(_studentRentedBooks, authorname);
         }
 
         public async Task<IActionResult> UpdateExistingLibrarian<T>(T entity) where T : class

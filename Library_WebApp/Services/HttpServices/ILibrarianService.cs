@@ -11,7 +11,7 @@ namespace Library_WebApp.Services.HttpServices
         public Task<(HttpStatusCode, bool)> AddNewLibrarian<T>(T entity) where T : class;
         public Task<AddNewLibrarian> RetrieveLibrarian(string username);
         public Task<IActionResult> UpdateExistingLibrarian<T>(T entity) where T : class;
-        public Task<List<StudentRentedBook>> studentRentedBooks(string bookname);
+        public Task<List<StudentRentedBook>> studentRentedBooks(string authorname);
         public Task<(HttpStatusCode, bool)> AddNewBook<T>(T entity) where T : class;
         public Task<(HttpStatusCode, bool)> IssueBook(string bookname, string username);
         public Task<List<BookIssue>> AllBooks();

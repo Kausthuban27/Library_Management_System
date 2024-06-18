@@ -2,6 +2,7 @@
 using LibraryData.Interface;
 using LibraryData.Models;
 using LibraryData.Utilities;
+using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using System;
@@ -45,43 +46,27 @@ namespace LibraryData.Services.BookServices
                 return (HttpStatusCode.InternalServerError, false);
             }
         }
-        public async Task<List<BookDetail>> SearchTheBook(SearchBooks searchBooks)
+        public async Task<List<T>> SearchTheBook<T>(string searchBooks) where T : class
         {
             try
             {
-                var books = _library.BookDetails.AsQueryable();
-                if(!string.IsNullOrEmpty(searchBooks.bookName))
+                if(searchBooks != null)
                 {
-                    books = books.Where(b => b.Bookname.Equals(searchBooks.bookName));
-                }
-                if(!string.IsNullOrEmpty(searchBooks.authorName))
-                {
-                    books = books.Where(b => b.BookAuthor.Equals(searchBooks.authorName));
-                }
-                if(!string.IsNullOrEmpty(searchBooks.publisherName))
-                {
-                    books = books.Where(b => b.BookPublisher.Equals(searchBooks.publisherName));
-                }
-                if(!string.IsNullOrEmpty(searchBooks.categoryName))
-                {
-                    books = books.Where(b => b.Category.Equals(searchBooks.categoryName));
-                }
+                    var parameterValue = new SqlParameter("@p0", searchBooks);
+                    var query = "EXEC [dbo].[SearchForBook] @p0";
 
-                if (books.Any())
-                {
-                    _library.SearchHistories.Add(new SearchHistory { BookName = searchBooks.bookName, BookAuthor = searchBooks.authorName, BookPublisher = searchBooks.publisherName, Category = searchBooks.categoryName});
-                    SaveChanges();
-                    return await books.ToListAsync();
+                    var result = await _library.Set<T>().FromSqlRaw(query, parameterValue).ToListAsync();
+                    return result;
                 }
                 else
                 {
-                    return new List<BookDetail> { };
+                    return new List<T> { };
                 }
             }
             catch(Exception ex)
             {
                 _logger.LogError($"The following Exception occured {ex}");
-                return new List<BookDetail> { };
+                return new List<T> { };
             }
         }
         public async Task<(HttpStatusCode, bool)> IssueABook(string bookname, string username)

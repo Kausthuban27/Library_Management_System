@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.Extensions.Logging.Abstractions;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -12,8 +13,8 @@ namespace LibraryData.Models
         public string AuthorName { get; set; } = null!;
         public string Publisher { get; set; } = null!;
         public string Category { get; set; } = null!;
-        public bool IsRented { get; set; }
-        public decimal RentAmount { get; set; }
+        public bool? IsRented { get; set; }
+        public decimal? RentAmount { get; set; }
         public string Username { get; set; } = null!;
     }
 }

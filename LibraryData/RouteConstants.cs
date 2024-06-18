@@ -20,5 +20,6 @@ namespace LibraryData
         public const string RetrieveLibrarian = "RetrieveLibrarian";
         public const string UpdatedLibrarian = "UpdateLibrarian";
         public const string GetAuthorBasedRentedBooks = "GetAuthorBasedRentedBooks";
+        public const string GetMonthlyReport = "GetMonthlyReport";
     }
 }

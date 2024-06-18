@@ -4,8 +4,10 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using System.Net;
 using System.Text;
-using System.Text.Json;
+using Newtonsoft.Json;
+using System.Text.Json.Serialization;
 using System.Web;
+using Azure;
 
 namespace Library_WebApp.Services
 {
@@ -20,7 +22,7 @@ namespace Library_WebApp.Services
         }
         public async Task<(HttpStatusCode, bool)> AddStudent<T>(Uri BaseUrl, T entity) where T : class
         {
-            string json = JsonSerializer.Serialize(entity);
+            string json = JsonConvert.SerializeObject(entity);
 
             Console.WriteLine(json);
             var request = new HttpRequestMessage
@@ -46,12 +48,15 @@ namespace Library_WebApp.Services
             query["username"] = username;
             uriBuilder.Query = query.ToString();
             HttpResponseMessage response = await _httpClient.GetAsync(uriBuilder.Uri);
-            Console.WriteLine(response);
-            Console.WriteLine(response.Content);
+            var opt = new JsonSerializerSettings
+            {
+                ReferenceLoopHandling = ReferenceLoopHandling.Ignore,
+            };
+
             if (response.IsSuccessStatusCode)
             {
                 string jsonResponse = await response.Content.ReadAsStringAsync();
-                var bookDetails = Newtonsoft.Json.JsonConvert.DeserializeObject<List<EbookRent>>(jsonResponse);
+                var bookDetails = Newtonsoft.Json.JsonConvert.DeserializeObject<List<EbookRent>>(jsonResponse, opt);
                 return bookDetails!;
             }
             return new List<EbookRent> { };
@@ -100,7 +105,7 @@ namespace Library_WebApp.Services
             if (response.IsSuccessStatusCode)
             {
                 string jsonResponse = await response.Content.ReadAsStringAsync();
-                var bookDetails = Newtonsoft.Json.JsonConvert.DeserializeObject<BookIssue>(jsonResponse);
+                var bookDetails = JsonConvert.DeserializeObject<BookIssue>(jsonResponse);
                 return (HttpStatusCode.OK, bookDetails!);
             }
             return (HttpStatusCode.BadRequest, new BookIssue { });
@@ -119,7 +124,7 @@ namespace Library_WebApp.Services
             if (response.IsSuccessStatusCode)
             {
                 string jsonResponse = await response.Content.ReadAsStringAsync();
-                var bookDetails = Newtonsoft.Json.JsonConvert.DeserializeObject<List<BookDetail>>(jsonResponse);
+                var bookDetails = JsonConvert.DeserializeObject<List<BookDetail>>(jsonResponse);
                 return bookDetails!;
             }
             return new List<BookDetail> { };
@@ -137,7 +142,7 @@ namespace Library_WebApp.Services
             if (response.IsSuccessStatusCode)
             {
                 string jsonResponse = await response.Content.ReadAsStringAsync();
-                var bookDetails = Newtonsoft.Json.JsonConvert.DeserializeObject<List<BookIssue>>(jsonResponse);
+                var bookDetails = JsonConvert.DeserializeObject<List<BookIssue>>(jsonResponse);
                 return bookDetails!;
             }
             return new List<BookIssue> { };
@@ -155,6 +160,20 @@ namespace Library_WebApp.Services
                 return bookDetails!;
             }
             return new List<BooksWithFine> { };
+        }
+
+        public async Task<List<EbookRentReport>> GetEbookRentReports(Uri BaseUrl)
+        {
+            UriBuilder uri = new UriBuilder(BaseUrl);
+
+            HttpResponseMessage res = await _httpClient.GetAsync(uri.ToString());
+            if (res.IsSuccessStatusCode)
+            {
+                string jsonResponse = await res.Content.ReadAsStringAsync();
+                var bookDetails = Newtonsoft.Json.JsonConvert.DeserializeObject<List<EbookRentReport>>(jsonResponse);
+                return bookDetails!;
+            }
+            return new List<EbookRentReport> { };
         }
     }
 }

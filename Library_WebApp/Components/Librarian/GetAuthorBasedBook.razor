@@ -4,8 +4,8 @@
     <div class="border rounded p-4 w-50">
         <form class="form-group" @onsubmit="GetRentedBooksByAuthor">
             <div class="mb-3">
-                <label for="Bookname" class="form-label fw-bold">Bookname:</label>
-                <InputText class="form-control" type="text" id="Bookname" @bind-Value="bookname" placeholder="Enter the Bookname" />
+                <label for="Authorname" class="form-label fw-bold">Authorname</label>
+                <InputText class="form-control" type="text" id="Authorname" @bind-Value="authorname" placeholder="Enter the Authorname" />
             </div>
             <div class="mb-3 d-grid gap-2 d-md-flex justify-content-md-center">
                 <button class="btn btn-primary" type="submit">Submit</button>
@@ -22,12 +22,12 @@
 @code 
 {
     public List<StudentRentedBook> studentRentedBooks { get; set; } = new();
-    private string bookname = null!;
+    private string authorname = null!;
 
     private async Task<List<StudentRentedBook>> GetRentedBooksByAuthor()
     {
-        studentRentedBooks = await _librarianService.studentRentedBooks(bookname);
-        bookname = string.Empty;
+        studentRentedBooks = await _librarianService.studentRentedBooks(authorname);
+        authorname = string.Empty;
         StateHasChanged();
         return studentRentedBooks;
     }

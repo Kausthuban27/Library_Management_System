@@ -11,7 +11,7 @@ namespace Library_WebApp.Services.HttpServices
     {
         private readonly LibraryDataConfiguration _libraryconfig;
         private readonly IStudentCRUD _studentCRUD;
-        private readonly Uri _registerUrl, _loginUrl, _rentUrl, _searchUrl, _rentedBooksUrl,_issuedBooks,_returnBook,_booksWithFineAmount;
+        private readonly Uri _registerUrl, _loginUrl, _rentUrl, _searchUrl, _rentedBooksUrl,_issuedBooks,_returnBook,_booksWithFineAmount,_getMonthlyRentedReport;
         public StudentService(IOptions<LibraryDataConfiguration> libraryOptions, IStudentCRUD studentCRUD)
         {
             _libraryconfig = libraryOptions.Value;
@@ -29,6 +29,7 @@ namespace Library_WebApp.Services.HttpServices
             _issuedBooks = new(BaseUrl, RouteConstants.GetIssuedBooks);
             _returnBook = new(BaseUrl, RouteConstants.ReturnBook);
             _booksWithFineAmount = new(BaseUrl, RouteConstants.BooksWithFineAmount);
+            _getMonthlyRentedReport = new(BaseUrl, RouteConstants.GetMonthlyReport);
         }
 
         public async Task<(HttpStatusCode, bool)> AddNewStudent<T>(T entity) where T : class
@@ -69,6 +70,11 @@ namespace Library_WebApp.Services.HttpServices
         public async Task<List<BooksWithFine>> booksWithFine()
         {
             return await _studentCRUD.booksWithFine(_booksWithFineAmount);
+        }
+
+        public async Task<List<EbookRentReport>> GetEbookRentedMonthly()
+        {
+            return await _studentCRUD.GetEbookRentReports(_getMonthlyRentedReport);
         }
     }
 }

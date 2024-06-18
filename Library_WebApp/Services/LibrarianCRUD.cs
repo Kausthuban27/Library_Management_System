@@ -154,11 +154,11 @@ namespace Library_WebApp.Services
             return new BadRequestObjectResult("Bad Request");
         }
 
-        public async Task<List<StudentRentedBook>> GetStudentRentedBook(Uri BaseUrl, string bookname)
+        public async Task<List<StudentRentedBook>> GetStudentRentedBook(Uri BaseUrl, string authorname)
         {
             UriBuilder uriBuilder = new UriBuilder(BaseUrl);
             var query = HttpUtility.ParseQueryString(uriBuilder.Query);
-            query["Bookname"] = bookname;
+            query["Authorname"] = authorname;
 
             uriBuilder.Query = query.ToString();
             HttpResponseMessage res = await _httpClient.GetAsync(uriBuilder.Uri);

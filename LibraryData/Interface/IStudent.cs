@@ -8,6 +8,7 @@ using System.Linq;
 using System.Net;
 using System.Text;
 using System.Threading.Tasks;
+using System.Xml;
 
 namespace LibraryData.Interface
 {
@@ -17,6 +18,7 @@ namespace LibraryData.Interface
         Task<(HttpStatusCode, bool)> AddStudent(AddNewStudent student);
         Task<(HttpStatusCode, bool)> RentEBook(string bookname, string username);
         Task<List<EbookRent>> RentedBooks(string username);
+        Task<List<T>> ExecuteMyStoredProcedureAsync<T>() where T : class;
         void SaveChanges();
     }
 }
