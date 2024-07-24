@@ -71,5 +71,7 @@
     <Build Include="Tables\SearchHistory.sql" />
     <Build Include="Stored_Procedure\Get_Rented_Books_By_Month.sql" />
     <Build Include="Stored_Procedure\SearchForBook.sql" />
+    <Build Include="Stored_Procedure\Measure_Performance_Of_Procedures.sql" />
+    <Build Include="Stored_Procedure\SearchForBookLoop.sql" />
   </ItemGroup>
 </Project>

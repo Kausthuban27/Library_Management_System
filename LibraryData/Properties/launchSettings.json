@@ -2,7 +2,7 @@
   "profiles": {
     "LibraryData": {
       "commandName": "Project",
-      "commandLineArgs": "--port 7295",
+      "commandLineArgs": "--port 7350",
       "launchBrowser": false
     }
   }

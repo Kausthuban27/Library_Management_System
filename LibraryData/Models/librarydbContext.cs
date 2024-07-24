@@ -32,7 +32,7 @@ public partial class LibrarydbContext : DbContext
     public virtual DbSet<Student> Students { get; set; }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-        => optionsBuilder.UseSqlServer();
+        => optionsBuilder.UseSqlServer("Data Source=CEI2103\\SQLEXPRESS;Initial Catalog=librarydb;Integrated Security=True;Connect Timeout=60;Encrypt=True;Trust Server Certificate=True;Application Intent=ReadWrite;Multi Subnet Failover=False");
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
